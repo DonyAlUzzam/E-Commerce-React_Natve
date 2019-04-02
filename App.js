@@ -2,12 +2,30 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
+import DetailProd from './app/screens/DetailProd'
+import RouteNav from './app/route/RouteNav'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import HomeScreen from './screens/HomeScreen'
-import Cart from './components/Cart'
+
 
 const AppDrawerNavigator =  createStackNavigator({
-  HomeScreen: { screen: HomeScreen },
+  HomeScreen: { screen: RouteNav,
+    headerMode: 'none',
+    navigationOptions: {
+      header: null,
+  } },
+  DetailProd : {screen: DetailProd,
+    headerMode: '',
+    navigationOptions: {
+    title: 'Detail',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    
+   } }
 })
 
 const AppContainer = createAppContainer(AppDrawerNavigator);
@@ -24,6 +42,7 @@ export default class App extends Component<Props> {
   render(){
     return(
      <AppContainer />
+
     );
   }
 

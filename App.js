@@ -2,8 +2,8 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
-import DetailProd from './app/screens/DetailProd'
 import RouteNav from './app/route/RouteNav'
+import ProductDetail from './app/screens/ProductDetail'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 
@@ -13,7 +13,8 @@ const AppDrawerNavigator =  createStackNavigator({
     navigationOptions: {
       header: null,
   } },
-  DetailProd : {screen: DetailProd,
+  
+   ProductDetail : {screen: ProductDetail,
     headerMode: '',
     navigationOptions: {
     title: 'Detail',
@@ -23,9 +24,9 @@ const AppDrawerNavigator =  createStackNavigator({
     headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
-    },
-    
-   } }
+    }
+  }
+}
 })
 
 const AppContainer = createAppContainer(AppDrawerNavigator);

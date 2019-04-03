@@ -1,10 +1,11 @@
 import React from 'react';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from "react-navigation";
 import  FontAwesome  from "react-native-vector-icons/FontAwesome";
-
+import  FontAwesomes  from "react-native-vector-icons/Entypo";
 
 import HomeScreen from '../screens/HomeScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import ProductList from '../screens/ProductList';
 
 // export const SignedOutNavigator = createStackNavigator({
 //     SignUp: {
@@ -25,13 +26,23 @@ export const RouteNav = createBottomTabNavigator({
 //   Home: { screen: HomeScreen },
 //   Settings: { screen: SettingsScreen },
 //   Profile: { screen: ProfileScreen },
-
-Home: {
+  
+  Home: {
     screen: HomeScreen,
     navigationOptions: {
       tabBarLabel: "Home",
       tabBarIcon: ({ tintColor }) => (
         <FontAwesome name="home" size={30} color={tintColor} />
+      )
+    }
+  },
+  
+  Product: {
+    screen: ProductList,
+    navigationOptions: {
+      tabBarLabel: "Product",
+      tabBarIcon: ({ tintColor }) => (
+        <FontAwesomes name="list" size={30} color={tintColor} />
       )
     }
   },

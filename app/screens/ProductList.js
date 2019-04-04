@@ -22,6 +22,12 @@ class ProductList extends Component {
         
     //    });
     //   }
+
+    _onPressCartScreen = () =>{
+        this.props.navigation.navigate('CartScreen');
+      // alert('sadasdas');
+     
+    }
     constructor(props) {
         super(props);
 
@@ -87,7 +93,8 @@ class ProductList extends Component {
     render() {
         return (
             <Container>
-                <HeaderCustom />
+                <HeaderCustom 
+                 _onPress={this._onPressCartScreen}/>
                 <Content>
                     <FlatList
                         data={this.state.itemDetail}
@@ -100,7 +107,9 @@ class ProductList extends Component {
                                 itemPrice={item.price}
                                 itemDetails={item.details}
                                 getDetails={() => {
+
                                     this.props.navigation.navigate("ProductDetail", {
+                                        itemKey: item.key,
                                         itemImage: item.img,
                                         itemName: item.val,
                                         itemPrice: item.price,

@@ -1,38 +1,51 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Container, Content, Item, Input, Icon, Card, CardItem, Right } from "native-base"
+import { Container, Content, Item, Input, Icon, Card, CardItem, Right, List } from "native-base"
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Swiper from 'react-native-swiper'
 import StarRating from 'react-native-star-rating'
 
 import HeaderCustom from '../components/Header'
-import RecommendedCartItem from '../components/RecommendedCardItem'
 import { FlatList } from 'react-native-gesture-handler';
 class HomeScreen extends React.Component {
   state = {
     product: [
       {
+        key: 'a',
         itemName: "Complete your shopping happiness",
         itemCreator: "Dony",
         itemPrice: "Rp.150.000",
         savings: "5%",
-        imageUri: 'https://ecs7.tokopedia.net/img/cache/700/product-1/2016/12/22/1489596/1489596_164fa661-ed16-4715-abc1-5b8df9ea1fea_320_320.jpg',
+        imageUri: require("../assets/1.jpg"),
         rating: 4
       },
       {
+        key: 'b',
         itemName: "Rosherun Shoes",
         itemCreator: "Kadek",
         itemPrice: "Rp.250.000",
         savings: "5%",
-        imageUri: 'https://ecs7.tokopedia.net/img/cache/700/product-1/2016/12/22/1489596/1489596_164fa661-ed16-4715-abc1-5b8df9ea1fea_320_320.jpg',
+        imageUri: require("../assets/4.jpg"),
         rating: 4
       }
     ]
   }
+
+  // componentDidMount(){
+  //   this.props.navigation.navigate('CartScreen');
+
+  // }
+
+  _onPressCartScreen = () =>{
+      this.props.navigation.navigate('CartScreen');
+    // alert('sadasdas');
+   
+  }
   render() {
     return (
       <Container>
-        <HeaderCustom />
+        <HeaderCustom 
+        _onPress={this._onPressCartScreen}/>
 
         <View style={{
           position: 'absolute', left: 0,
@@ -75,6 +88,7 @@ class HomeScreen extends React.Component {
             <CardItem header style={{ borderBottomColor: '#dee0e2', borderBottomWidth: 1 }}>
               <Text style={{ fontWeight: 'bold', paddingLeft: 75 }}> Your Recommendations</Text>
             </CardItem>
+            <List>
             <FlatList
               data={this.state.product}
               renderItem={({ item }) => (
@@ -82,7 +96,7 @@ class HomeScreen extends React.Component {
                   <CardItem>
                     <View>
                       <Image style={{ height: 100, width: 90 }}
-                        source={{uri:item.imageUri}} />
+                        source={item.imageUri} />
                     </View>
                     <Right style={{ justifyContent: 'center', flex: 1, alignItems: 'flex-start', height: 90, paddingHorizontal: 20, marginTop: 1 }}>
                       <Text>{item.itemName}</Text>
@@ -106,38 +120,7 @@ class HomeScreen extends React.Component {
                 </View>
               )}
             />
-            {/* <RecommendedCartItem
-              itemName="Complete your shopping happiness"
-              itemCreator="Dony"
-              itemPrice="Rp.150.000"
-              savings="5%"
-              imageUri={require('../assets/1.jpg')}
-              rating={4}
-            />
-            <RecommendedCartItem
-              itemName="Rosherun Shoes"
-              itemCreator="Fadli"
-              itemPrice="Rp.250.000"
-              savings="15%"
-              imageUri={require('../assets/2.jpg')}
-              rating={5}
-            />
-            <RecommendedCartItem
-              itemName="Running Sneaker"
-              itemCreator="Kadek"
-              itemPrice="Rp.100.000"
-              savings="10%"
-              imageUri={require('../assets/3.jpg')}
-              rating={4}
-            />
-            <RecommendedCartItem
-              itemName="Complete your shopping happiness"
-              itemCreator="Dony"
-              itemPrice="Rp.150.000"
-              savings="20%"
-              imageUri={require('../assets/4.jpg')}
-              rating={4}
-            /> */}
+          </List>
           </Card>
         </Content>
       </Container>

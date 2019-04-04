@@ -5,13 +5,8 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import FAIcons from 'react-native-vector-icons/AntDesign'
 
 
-class HeaderCustom extends React.Component {
-  // _onPress () {
-  //     // this.props.navigation.navigate('CartScreen');
-  //   alert('sadasdas');
-   
-  // }
-  
+class HeaderCart extends React.Component {
+
   render() {
     return (
       <Header style={{
@@ -20,9 +15,10 @@ class HeaderCustom extends React.Component {
       }}>
         <Left style={{ flexDirection: 'row' }}>
           <Icon name='md-menu' style={{ color: 'white', fontSize: 35, left: 0, marginRight: 10 }} />
-          <FAIcons name='taobao-square' style={{ fontSize: 32, color: 'white' }} />
+         
         </Left>
         <Right>
+        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Keranjang Anda</Text>
           <Button transparent>
         <TouchableOpacity onPress={this.props._onPress}>
            <Icon
@@ -38,4 +34,4 @@ class HeaderCustom extends React.Component {
 }
 
 
-export default HeaderCustom;
+export default HeaderCart;

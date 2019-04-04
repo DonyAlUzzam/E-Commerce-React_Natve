@@ -17,6 +17,7 @@ class ProductDetail extends Component {
 
     render() {
         const { navigation } = this.props;
+        const key = navigation.getParam("itemKey", "");
         const img = navigation.getParam("itemImage", "");
         const name = navigation.getParam("itemName", "");
         const price = navigation.getParam("itemPrice", "");
@@ -62,14 +63,22 @@ class ProductDetail extends Component {
                     </Card>
                 </Content>
                 <Footer style={styles.footerStyle}>
-                    <Button style={styles.footerButton}>
+                    <Button style={styles.footerButton}
+                      onPress={() => {
+                        this.props.navigation.navigate("CartScreen",  {
+                            itemKey: key,
+                            itemImage: img,
+                            itemName: name,
+                            itemPrice: price,
+                            itemSeller: seller,
+                            itemDetails: details
+                        });
+                    }}>
                         <Text>Add to Cart</Text>
                     </Button>
                     <Button
                         style={styles.footerButtonMain}
-                        onPress={() => {
-                            this.props.navigation.navigate("CartScreen");
-                        }}
+                      
                     >
                         <Text style={styles.buttonText}>Buy Now</Text>
                     </Button>

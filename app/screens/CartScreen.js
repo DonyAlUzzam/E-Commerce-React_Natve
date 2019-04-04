@@ -67,7 +67,8 @@ class CartScreen extends Component {
                             name: name,
                             price: price,
                             seller: seller,
-                            details: details
+                            details: details,
+                           
                         }
                     ]
                 });
@@ -112,17 +113,12 @@ class CartScreen extends Component {
                                 itemSeller={item.seller}
                                 itemPrice={item.price}
                                 itemDetails={item.details}
+                                prices={item.itemPrices}
+                                // quantity={item.itemQty}
                             />
                         )}
                     />
-                    <View style={{flex:1}}>
-                    <Button
-                        style={styles.footerButtonMain}
-                      
-                    >
-                        <Text style={styles.buttonText}>CheckOut</Text>
-                    </Button>
-                    </View>
+                  
                      
                    </Content>
                 </Container>
@@ -136,7 +132,9 @@ class CartScreen extends Component {
 const styles = StyleSheet.create({
     footerButtonMain: { 
         alignSelf: "flex-end",
-        padding:7
+        padding:7,
+        borderRadius: 10,
+        backgroundColor: '#3dd43f'
     },
     buttonText: {
         fontSize: 16,

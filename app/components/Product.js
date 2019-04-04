@@ -25,7 +25,7 @@ class Product extends Component {
                                         fontSize: 18
                                     }}
                                 >
-                                    {this.props.itemPrice}
+                                    Rp. {this.props.itemPrice}
                                 </Text>
                                 <Text style={{ fontSize: 13 }}>
                                     {this.props.itemSeller}

@@ -12,6 +12,7 @@ import {
     Button
 } from "native-base";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { stringToRupiah } from "../helper/currency"
 
 class Cart extends Component {
     constructor(props) {
@@ -61,6 +62,11 @@ class Cart extends Component {
             });
         }
     };
+    genenerateHarga = () => {
+        const total = Number(this.state.myNumber) * Number(this.props.itemPrice);
+        
+        return stringToRupiah(total.toString())
+    }
     render() {
         return (
             <View key={this.props.itemKey}>
@@ -79,7 +85,7 @@ class Cart extends Component {
                                         fontSize: 18
                                     }}
                                 >
-                                    {this.props.itemPrice}
+                                    Rp. {this.props.itemPrice}
                                 </Text>
                                 <Text style={{ fontSize: 13 }}>
                                     {this.props.itemSeller}
@@ -98,15 +104,18 @@ class Cart extends Component {
                                 />
                             </Button>
                             <Body>
-                                <Text>Qty :</Text>
+                                <Text>Qty : </Text>
                             </Body>
 
+                            {/* <Text>{this.props.itemQty}</Text> */}
                             <Input
                                 keyboardType={"number-pad"}
                                 onChangeText={text => this.onTextChanged(text)}
                                 onEndEditing={() => this.onTextEnd()}
                                 value={this.state.myNumber.toString()}
-                            />
+                            >
+                                {/* {this.props.itemQty} */}
+                            </Input>
                             <Button
                                 style={styles.buttonWhite}
                                 onPress={this.addNum.bind(this)}
@@ -118,6 +127,13 @@ class Cart extends Component {
                                 />
                             </Button>
                         </Left>
+                        
+                    </CardItem>
+                    <CardItem style={{ justifyContent: 'space-between' }} >
+                        <Text>TotalHarga: {this.genenerateHarga()} </Text>
+                    <Button style={styles.footerButtonMain}>
+                        <Text style={styles.buttonText}>CheckOut</Text>
+                    </Button>
                     </CardItem>
                 </Card>
             </View>
@@ -128,6 +144,19 @@ class Cart extends Component {
 const styles = StyleSheet.create({
     buttonWhite: {
         backgroundColor: "#44bb44"
-    }
+    },
+  
+        footerButtonMain: { 
+            justifyContent: 'space-between',
+            alignSelf: "flex-end",
+            padding:7,
+            borderRadius: 10,
+            backgroundColor: '#3dd43f'
+        },
+        buttonText: {
+            fontSize: 16,
+            color: "#ffffff"
+        }
+    
 });
 export default Cart;

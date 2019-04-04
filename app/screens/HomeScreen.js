@@ -21,11 +21,29 @@ class HomeScreen extends React.Component {
       },
       {
         key: 'b',
+        itemName: "Running Snake",
+        itemCreator: "Khairi",
+        itemPrice: "Rp.250.000",
+        savings: "5%",
+        imageUri: require("../assets/1.jpg"),
+        rating: 4
+      },
+      {
+        key: 'c',
         itemName: "Rosherun Shoes",
         itemCreator: "Kadek",
         itemPrice: "Rp.250.000",
         savings: "5%",
         imageUri: require("../assets/4.jpg"),
+        rating: 4
+      },
+      {
+        key: 'd',
+        itemName: "Complete your shopping happiness",
+        itemCreator: "Dony",
+        itemPrice: "Rp.100.000",
+        savings: "5%",
+        imageUri: require("../assets/1.jpg"),
         rating: 4
       }
     ]

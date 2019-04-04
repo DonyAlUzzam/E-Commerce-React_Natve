@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import {
     Container,
     Content,
+    Button,
     Card,
     CardItem,
     Body,
@@ -11,13 +12,16 @@ import {
     Icon
 } from "native-base";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import { FlatList, Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import { withNavigation } from "react-navigation";
 
 import Cart from "../components/Cart";
 import HeaderCart from '../components/HeaderCart'
 
 class CartScreen extends Component {
+
+  
+
     constructor(props) {
         super(props);
 
@@ -73,7 +77,9 @@ class CartScreen extends Component {
     }
   
     render() {
+        const {navigate} = this.props.navigation;
         
+
         if (this.state.itemDetail.length < 1) {
             return (
                 <Container
@@ -83,15 +89,18 @@ class CartScreen extends Component {
                     <MaterialIcons
                         name="add-shopping-cart"
                         style={{ fontSize: 200 }}
-                    />
-                    <Text>Ayoo tambah belanjaan</Text>
-
+                    /><Button style={{ backgroundColor: '#ff76ff',  flexDirection: 'row', justifyContent: "center", alignSelf: 'center', alignItems: "center"}}
+                    onPress={()=> navigate('ProductList')}>
+                        <Text style={{ padding:7, fontSize: 20, color: 'white'}}> Ayoo tambah belanjaan </Text>
+                    </Button>
                 </Container>
             );
         } else {
             return (
                 <Container>
-                 <HeaderCart />
+                 <HeaderCart 
+                  _onPressCart={() => this.props.navigation.navigate('ProductList')}
+                 />
                  <Content>
                         <FlatList
                         data={this.state.itemDetail}
@@ -106,6 +115,15 @@ class CartScreen extends Component {
                             />
                         )}
                     />
+                    <View style={{flex:1}}>
+                    <Button
+                        style={styles.footerButtonMain}
+                      
+                    >
+                        <Text style={styles.buttonText}>CheckOut</Text>
+                    </Button>
+                    </View>
+                     
                    </Content>
                 </Container>
             );
@@ -114,4 +132,16 @@ class CartScreen extends Component {
         }
     }
 }
+
+const styles = StyleSheet.create({
+    footerButtonMain: { 
+        alignSelf: "flex-end",
+        padding:7
+    },
+    buttonText: {
+        fontSize: 16,
+        color: "#ffffff"
+    }
+});
+
 export default withNavigation(CartScreen);

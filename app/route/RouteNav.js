@@ -37,7 +37,7 @@ export const RouteNav = createBottomTabNavigator({
     }
   },
 
-  Product: {
+  ProductList: {
     screen: ProductList,
     navigationOptions: {
       tabBarLabel: "Product",

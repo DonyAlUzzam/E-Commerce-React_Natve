@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import RouteNav from './app/route/RouteNav'
+import ProductList from './app/screens/ProductList'
 import CartScreen from './app/screens/CartScreen'
 import ProductDetail from './app/screens/ProductDetail'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
@@ -15,8 +16,11 @@ const AppDrawerNavigator =  createStackNavigator({
     navigationOptions: {
       header: null,
   } },
-  
-  
+  ProductList: { screen: ProductList,
+    headerMode: 'none',
+    navigationOptions: {
+      header: null,
+  } },
  
    ProductDetail : {screen: ProductDetail,
     headerMode: '',

@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Container, Content, Header, Left, Right, Icon, Button } from 'native-base'
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import FAIcons from 'react-native-vector-icons/AntDesign'
-
+import { Container, Content, Header, Center, Left, Right, Icon, Button } from 'native-base'
 
 class HeaderCart extends React.Component {
 
@@ -13,12 +10,15 @@ class HeaderCart extends React.Component {
         backgroundColor: '#3a455c',
         height: 70, borderBottomColor: '#757575'
       }}>
+      <Button transparent>
+        <TouchableOpacity onPress={this.props._onPressCart}>
         <Left style={{ flexDirection: 'row' }}>
-          <Icon name='md-menu' style={{ color: 'white', fontSize: 35, left: 0, marginRight: 10 }} />
-         
+        <Icon type="MaterialIcons"  name='arrow-back' style={{ color: 'white', fontSize: 35, left: 0, marginRight: 10 }} />
+          <Text style={{ justifyContent: 'center', position: 'absolute', left: 125, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>Keranjang Anda</Text>
         </Left>
+        </TouchableOpacity>
+        </Button>
         <Right>
-        <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>Keranjang Anda</Text>
           <Button transparent>
         <TouchableOpacity onPress={this.props._onPress}>
            <Icon

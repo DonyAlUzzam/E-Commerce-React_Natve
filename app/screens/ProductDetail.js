@@ -63,7 +63,7 @@ class ProductDetail extends Component {
                     </Card>
                 </Content>
                 <Footer style={styles.footerStyle}>
-                    <Button style={styles.footerButton}
+                    <Button style={styles.footerButtonMain}
                       onPress={() => {
                         this.props.navigation.navigate("CartScreen",  {
                             itemKey: key,
@@ -76,12 +76,7 @@ class ProductDetail extends Component {
                     }}>
                         <Text>Add to Cart</Text>
                     </Button>
-                    <Button
-                        style={styles.footerButtonMain}
-                      
-                    >
-                        <Text style={styles.buttonText}>Buy Now</Text>
-                    </Button>
+                   
                 </Footer>
             </Container>
         );
@@ -89,13 +84,6 @@ class ProductDetail extends Component {
 }
 
 const styles = StyleSheet.create({
-    footerButton: {
-        backgroundColor: "#dddddd",
-        marginLeft: 4,
-        marginRight: 4,
-        flex: 0.5,
-        justifyContent: "center"
-    },
     footerButtonMain: {
         backgroundColor: "#44dd44",
         marginLeft: 4,

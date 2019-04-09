@@ -148,4 +148,3 @@ class HomeScreen extends React.Component {
 }
 
 export default HomeScreen;
-

@@ -6,6 +6,7 @@ import RouteNav from './app/route/RouteNav'
 import ProductList from './app/screens/ProductList'
 import CartScreen from './app/screens/CartScreen'
 import ProductDetail from './app/screens/ProductDetail'
+import Checkout from './app/screens/Checkout'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 
@@ -27,7 +28,7 @@ const AppDrawerNavigator =  createStackNavigator({
     navigationOptions: {
     title: 'Detail',
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#3a455c',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -43,7 +44,12 @@ CartScreen: {
       <FontAwesomes name="md-cart" size={30} color={tintColor} />
     )
   }
-}
+},
+Checkout: { screen: Checkout,
+  headerMode: 'none',
+  navigationOptions: {
+    header: null,
+} },
 })
 
 

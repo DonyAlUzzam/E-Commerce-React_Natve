@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { Container, Content, Header, Center, Left, Right, Icon, Button } from 'native-base'
+import { Container, Content, Header, Center, Left, Right, Icon, Button, Body } from 'native-base'
 
 class HeaderCart extends React.Component {
 
@@ -12,13 +12,15 @@ class HeaderCart extends React.Component {
       }}>
        
       <Button transparent>
-        <TouchableOpacity onPress={this.props._onPressCart}>
+        <TouchableOpacity onPress={this.props.onPressCart}>
         <Left style={{ flexDirection: 'row' }}>
         <Icon type="MaterialIcons"  name='arrow-back' style={{ color: 'white', fontSize: 35, left: 0, marginRight: 10 }} />
-        <Text style={{ alignItems: 'center', justifyContent: 'center', position: 'absolute', left: 100, color: 'white', fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>Keranjang Anda</Text>
         </Left>
         </TouchableOpacity>
         </Button>
+        <Body style={{ alignItems: 'center', justifyContent: 'center', position: 'absolute', textAlign: 'center' }}>
+        <Text style={{ fontSize: 20, color: 'white', fontWeight: 'bold' }}>Your Shopping Cart</Text>
+        </Body>
         <Right>
           <Button transparent>
         <TouchableOpacity onPress={this.props._onPress}>

@@ -2,116 +2,127 @@ import React, { Component } from "react";
 import {
     Container,
     Content,
-    Card,
-    CardItem,
-    Body,
-    Left,
-    Thumbnail
+
 } from "native-base";
 
 import HeaderCustom from '../components/Header'
 import { FlatList, Text, TouchableOpacity } from "react-native";
 import { Header } from 'react-navigation';
 import Product from "../components/Product";
+import { stringToRupiah } from "../helper/currency"
+import axios from 'axios'
+import RestAPI from '../constants/apiConstant'
 
 class ProductList extends Component {
 
-    // _onPress=() => {
-    //     /* 1. Navigate to the Details route with params */
-    //     this.props.navigation.navigate('ProductDetail', {
-        
-    //    });
-    //   }
-
-    _onPressCartScreen = () =>{
+    onPressCartScreen = () => {
         this.props.navigation.navigate('CartScreen');
-      // alert('sadasdas');
-     
+        // alert('sadasdas');
+
     }
+
+
     constructor(props) {
         super(props);
 
         this.state = {
-            itemDetail: [
-                {
-                    key: "a",
-                    img: require("../assets/1.jpg"),
-                    val: "Sepatu",
-                    seller: "Khairi",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "150000"
-                },
-                {
-                    key: "b",
-                    img: require("../assets/2.jpg"),
-                    val: "Sepatu",
-                    seller: "Dony",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "200000"
-                },
-                {
-                    key: "c",
-                    img: require("../assets/3.jpg"),
-                    val: "spatu",
-                    seller: "Kadek",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "5000000"
-                },
-                {
-                    key: "d",
-                    img: require("../assets/4.jpg"),
-                    val: "spt",
-                    seller: "Fadli",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "12000000"
-                },
-                {
-                    key: "e",
-                    img: require("../assets/3.jpg"),
-                    val: "spatu",
-                    seller: "Kadek",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "5000000"
-                },
-                {
-                    key: "f",
-                    img: require("../assets/4.jpg"),
-                    val: "spt",
-                    seller: "Fadli",
-                    details:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    price: "12000000"
-                }
+            Product: [
+                // {
+                //     key: 1,
+                //     img: require("../assets/1.jpg"),
+                //     name: "Sepatu Pan Tas",
+                //     seller: "Khairi",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "150000"
+                // },
+                // {
+                //     key: 2,
+                //     img: require("../assets/2.jpg"),
+                //     val: "Runshake Shoes",
+                //     seller: "Dony",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "200000"
+                // },
+                // {
+                //     key: 3,
+                //     img: require("../assets/3.jpg"),
+                //     val: "Nikela Shoes",
+                //     seller: "Kadek",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "5000000"
+                // },
+                // {
+                //     key: 4,
+                //     img: require("../assets/4.jpg"),
+                //     val: "Kurma Shoes",
+                //     seller: "Fadli",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "12000000"
+                // },
+                // {
+                //     key: 5,
+                //     img: require("../assets/3.jpg"),
+                //     val: "Septi Shoes",
+                //     seller: "Kadek",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "5000000"
+                // },
+                // {
+                //     key: 6,
+                //     img: require("../assets/4.jpg"),
+                //     val: "Sepatu Karma",
+                //     seller: "Fadli",
+                //     details:
+                //         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                //     price: "12000000"
+                // }
             ]
+
         };
+    }
+
+    componentDidMount() {
+        axios.get(`${RestAPI.base_url}products`)
+            .then( (response) =>{
+            
+              this.setState({
+                  Product: response.data
+              })
+            console.log(response);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     }
     render() {
         return (
             <Container>
-                <HeaderCustom 
-                 _onPress={this._onPressCartScreen}/>
+                <HeaderCustom onPress={this.onPressCartScreen} />
                 <Content>
                     <FlatList
-                        data={this.state.itemDetail}
+                        data={this.state.Product}
                         renderItem={({ item }) => (
                             <Product
                                 // _onPress={this._onPress}
-                                itemImage={item.img}
-                                itemName={item.val}
+                                itemImage={`${RestAPI.picture_url}${item.img}`}
+                                itemName={item.name}
                                 itemSeller={item.seller}
-                                itemPrice={item.price}
+                                itemPrice={stringToRupiah(String(item.price))}
                                 itemDetails={item.details}
                                 getDetails={() => {
-
                                     this.props.navigation.navigate("ProductDetail", {
-                                        itemKey: item.key,
+                                        itemKey: item.id,
                                         itemImage: item.img,
-                                        itemName: item.val,
+                                        itemName: item.name,
                                         itemPrice: item.price,
                                         itemSeller: item.seller,
                                         itemDetails: item.details

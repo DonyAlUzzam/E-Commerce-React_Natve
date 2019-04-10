@@ -13,6 +13,7 @@ import {
 } from "native-base";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Icon from "react-native-vector-icons/FontAwesome";
+
 import { stringToRupiah } from "../helper/currency"
 
 class Cart extends Component {
@@ -25,6 +26,7 @@ class Cart extends Component {
 
    
     render() {
+     
         return (
             <View style={styles.cardList}>
             <CardItem style={styles.cardImage} cardHeader>

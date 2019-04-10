@@ -4,9 +4,9 @@ import { Container, Content, Item, Input, Icon, Card, CardItem, Right, List } fr
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Swiper from 'react-native-swiper'
 import StarRating from 'react-native-star-rating'
+import { FlatList } from 'react-native-gesture-handler';
 
 import HeaderCustom from '../components/Header'
-import { FlatList } from 'react-native-gesture-handler';
 class HomeScreen extends React.Component {
   state = {
     product: [

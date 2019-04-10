@@ -9,23 +9,29 @@ export default class Checkout extends Component {
 
     constructor(props) {
         super(props);
+        const { navigation } = props;
+        const totalPrice = navigation.getParam("total", "");
         this.state = {
             address: '',
-            courier: '200000',
-            total: '20000'
+            courier: '30000',
+            total:totalPrice, 
+             totalPayment: 0
         };
+        
     }
 
-    totalPrice = () => {
-        const total = Number(this.state.total) + Number(this.state.courier);
+    totalPayment = () => {
+        const totalPayment = Number(this.state.total) + Number(this.state.courier);
 
-        return stringToRupiah(total.toString());
+        return totalPayment.toString();
     }
+
+
 
     render() {
-        const { navigation } = this.props;
-        const price = navigation.getParam("itemPrice", "");
-
+        // const { navigation } = this.props;
+        // const price = navigation.getParam("itemPrice", "");
+       
         return (
             <Container>
                 <HeaderCustom />
@@ -63,7 +69,7 @@ export default class Checkout extends Component {
                                     selectedValue={this.state.language}
                                     style={{ height: '100%', width: '100%' }}
                                     onValueChange={(itemValue, itemIndex) =>
-                                        this.setState({ courier: itemValue })
+                                        this.setState({ courier: itemValue },this.totalPayment)
                                     }
                                     selectedValue={this.state.courier}
                                 >
@@ -86,8 +92,8 @@ export default class Checkout extends Component {
                                         fontSize: 18,
                                         fontWeight: 'bold',
                                     }}
-                                >  {this.props.itemPrice}
-                                Rp. 5.400.000
+                                >   {stringToRupiah(String(this.state.total))} 
+                              
                                 </Text>
                             </CardItem>
                         </Card>
@@ -103,7 +109,7 @@ export default class Checkout extends Component {
                                         fontSize: 18,
                                         fontWeight: 'bold',
                                     }}
-                                > Rp. 20.000
+                                >  {stringToRupiah(this.state.courier)} 
                                 </Text>
                             </CardItem>
                         </Card>
@@ -119,7 +125,8 @@ export default class Checkout extends Component {
                                         fontSize: 18,
                                         fontWeight: 'bold',
                                     }}
-                                > Rp. 5.420.000
+                                >
+                                {stringToRupiah(this.totalPayment())} 
                                 </Text>
                             </CardItem>
                         </Card>

@@ -4,9 +4,12 @@ import { Text, StyleSheet, Image, Alert, TouchableOpacity, TextInput } from 'rea
 import { Container, View, Card, CardItem } from 'native-base';
 import { FlatList } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import config from 'react-native-config';
 
+import RestAPI from '../constants/apiConstant'
+import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 import HeaderCart from '../components/HeaderCart'
-import Cart from '../components/Cart';
+import Cart from '../components/Cart'
 import { stringToRupiah } from '../helper/currency';
 
 
@@ -163,7 +166,7 @@ class CartScreen extends Component {
         const id = navigation.getParam('itemKey', '');
         const qty = navigation.getParam('quantity', '');
 
-     
+   
 
 
         // alert(key);
@@ -214,13 +217,13 @@ class CartScreen extends Component {
                         <FlatList
                             data={this.state.product}
                             renderItem={({ item }) =>
-                                (
+                            (
                                     <Card >
                                         <View style={styles.cardList}>
                                             <View style={styles.cardBody}>
                                                 <Cart
                                                     itemKey={item.id}
-                                                    itemImage={item.uri}
+                                                    itemImage={`${PIC_URL}${item.uri}`}
                                                     itemName={item.name}
                                                     itemPrice={stringToRupiah(String(item.price))}
 
@@ -281,8 +284,7 @@ class CartScreen extends Component {
 
                                         </View>
                                     </Card>
-                                )
-                            }
+                                )}
                             keyExtractor={item => item.id}
                         />
                     </View>

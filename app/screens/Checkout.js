@@ -37,6 +37,27 @@ export default class Checkout extends Component {
                 <HeaderCustom />
                 <View style={styles.container}>
                     <Content>
+                    <Card >
+                            <View style={styles.cardAddress}>
+                                <CardItem>
+                                    <Text>Your Name :  </Text>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            justifyContent: 'center',
+                                            alignItems: 'stretch'
+                                        }}
+                                    >
+                                        <TextInput placeholder="Dony Al-Uzzam"
+                                            {...this.props}
+                                            editable={true}
+                                            maxLength={40}
+                                        />
+                                    </View>
+                                </CardItem>
+                              
+                            </View>
+                        </Card>
                         <Card >
                             <View style={styles.cardAddress}>
                                 <CardItem>
@@ -48,7 +69,7 @@ export default class Checkout extends Component {
                                             alignItems: 'stretch'
                                         }}
                                     >
-                                        <TextInput
+                                        <TextInput placeholder="Jl. Kol. H.Burlian Tanah Abang, Muara Enim, Sumatera Selatan"
                                             {...this.props}
                                             editable={true}
                                             maxLength={40}

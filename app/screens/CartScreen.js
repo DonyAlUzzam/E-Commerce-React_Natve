@@ -1,10 +1,11 @@
 
 import React, { Component } from 'react';
 import { Text, StyleSheet, Image, Alert, TouchableOpacity, TextInput } from 'react-native';
-import { Container, View, Card, CardItem } from 'native-base';
+import { Container, View, Card, CardItem, Content } from 'native-base';
 import { FlatList } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import config from 'react-native-config';
+import axios from 'axios'
 
 import RestAPI from '../constants/apiConstant'
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
@@ -15,12 +16,14 @@ import { stringToRupiah } from '../helper/currency';
 
 class CartScreen extends Component {
     // eslint-disable-next-line no-undef
-  
+
     constructor(props) {
         super(props);
         this.state = {
-            product: [],
-            total: 0,
+            product: [
+
+            ],
+            total: 0
         };
     }
 
@@ -46,7 +49,7 @@ class CartScreen extends Component {
             }
         });
         let totalPrice = 0;
-        poke.forEach((val, i) => {
+        product.forEach((val, i) => {
             totalPrice += val.qty * val.price;
         });
         this.setState({
@@ -56,10 +59,33 @@ class CartScreen extends Component {
 
     };
 
+    getCart = () => {
+        axios.get(`${BASE_URL}orders`)
+            .then((response) => {
+                // alert(JSON.stringify(response.data, null, 2))
+                this.setState({
+                    product: response.data.data,
+                    total: response.data.total
+                })
+
+                console.log(response);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+    }
+
     componentDidMount() {
-        this.props.navigation.addListener('willFocus', route => {
+        this.getCart();
+        this.props.navigation.addListener('didFocus', route => {
             this.addData();
+
+            this.getCart();
+
         });
+
+
     }
 
     addNum = (id) => {
@@ -166,7 +192,7 @@ class CartScreen extends Component {
         const id = navigation.getParam('itemKey', '');
         const qty = navigation.getParam('quantity', '');
 
-   
+
 
 
         // alert(key);
@@ -192,8 +218,9 @@ class CartScreen extends Component {
         }
     }
 
-
+    
     render() {
+     
         if (this.state.product.length < 1) {
             // eslint-disable-next-line no-unused-expressions
             return (
@@ -207,94 +234,94 @@ class CartScreen extends Component {
             // eslint-disable-next-line no-else-return
         } else {
             return (
-                <Container>
-                       <HeaderCart 
-                  onPressCart={() => this.props.navigation.navigate('ProductList')}
-                 />
+                <Container >
+                    <HeaderCart
+                        onPressCart={() => this.props.navigation.navigate('ProductList')}
+                    />
+                    <Content>
+                        <View style={styles.container}>
 
-                    <View style={styles.container}>
+                            <FlatList
+                                data={this.state.product}
+                                renderItem={({ item }) =>
+                                    (
+                                        <Card >
+                                            <View style={styles.cardList}>
+                                                <View style={styles.cardBody}>
+                                                    <Cart
+                                                        itemKey={item.product.id}
+                                                        itemImage={`${PIC_URL}${item.product.image}`}
+                                                        itemName={item.product.name}
+                                                        itemPrice={stringToRupiah(String(item.product.price))}
 
-                        <FlatList
-                            data={this.state.product}
-                            renderItem={({ item }) =>
-                            (
-                                    <Card >
-                                        <View style={styles.cardList}>
-                                            <View style={styles.cardBody}>
-                                                <Cart
-                                                    itemKey={item.id}
-                                                    itemImage={`${PIC_URL}${item.uri}`}
-                                                    itemName={item.name}
-                                                    itemPrice={stringToRupiah(String(item.price))}
+                                                    />
+                                                </View>
+                                                <View style={styles.cardFooter}>
 
-                                                />
-                                            </View>
-                                            <View style={styles.cardFooter}>
+                                                    <View style={styles.quantity} >
+                                                        <View
+                                                            style={{
+                                                                width: 18,
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                marginLeft: 85,
+                                                            }}
+                                                        >
+                                                            <TouchableOpacity>
+                                                                <FontAwesome name="minus" size={20} color='#f7c744' onPress={() => this.subNum(item.id)} />
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                        <View
+                                                            style={{
+                                                                width: 18,
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                marginLeft: 25,
+                                                            }}
+                                                        >
+                                                            <TextInput
+                                                                style={{ height: 35, width: 40, borderColor: '#f7c744', borderWidth: 1, textAlign: 'center', paddingBottom: 6 }}
+                                                                onChangeText={(text) => this.onTextChanged(text, item.id)}
+                                                                textAlignVertical={'center'}
+                                                                textAlignHorizontal={'center'}
+                                                                keyboardType={'numeric'}
+                                                                value={item.qty.toString()}
+                                                            />
+                                                        </View>
+                                                        <View
+                                                            style={{
+                                                                width: 18,
+                                                                alignItems: 'center',
+                                                                justifyContent: 'center',
+                                                                marginLeft: 24,
+                                                            }}
+                                                        >
+                                                            <TouchableOpacity>
+                                                                <FontAwesome name="plus" size={20} color='#f7c744' onPress={() => this.addNum(item.id)} />
+                                                            </TouchableOpacity>
 
-                                                <View style={styles.quantity} >
-                                                    <View
-                                                        style={{
-                                                           width: 18,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            marginLeft:85,
-                                                        }}
-                                                    >
-                                                        <TouchableOpacity>
-                                                            <FontAwesome name="minus" size={20} color='#f7c744' onPress={() => this.subNum(item.id)} />
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                    <View
-                                                        style={{
-                                                            width: 18,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            marginLeft:25,
-                                                        }}
-                                                    >
-                                                        <TextInput
-                                                            style={{ height: 35, width: 40, borderColor: '#f7c744', borderWidth: 1, textAlign: 'center', paddingBottom: 6 }}
-                                                            onChangeText={(text) => this.onTextChanged(text, item.id)}
-                                                            textAlignVertical={'center'}
-                                                            textAlignHorizontal={'center'}
-                                                            keyboardType={'numeric'}
-                                                            value={item.qty.toString()}
-                                                        />
-                                                    </View>
-                                                    <View
-                                                        style={{
-                                                            width: 18,
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            marginLeft:24,
-                                                        }}
-                                                    >
-                                                        <TouchableOpacity>
-                                                            <FontAwesome name="plus" size={20} color='#f7c744' onPress={() => this.addNum(item.id)} />
-                                                        </TouchableOpacity>
-
-                                                    </View>
-                                                    <View style={styles.quantity}>
-                                                        <TouchableOpacity>
-                                                            <FontAwesome name="trash" size={24} onPress={() => this.deleteItem(item.id)} />
-                                                        </TouchableOpacity>
+                                                        </View>
+                                                        <View style={styles.quantity}>
+                                                            <TouchableOpacity>
+                                                                <FontAwesome name="trash" size={24} onPress={() => this.deleteItem(item.id)} />
+                                                            </TouchableOpacity>
+                                                        </View>
                                                     </View>
                                                 </View>
+
                                             </View>
-
-                                        </View>
-                                    </Card>
-                                )}
-                            keyExtractor={item => item.id}
-                        />
-                    </View>
-
+                                        </Card>
+                                    )}
+                                keyExtractor={item => item.id}
+                            />
+                        </View>
+                    </Content>
                     <View style={styles.footer}>
 
                         <View style={styles.buttonAdd}>
                             <Text>Total :</Text>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', }}>
-                                {stringToRupiah(this.state.total.toString())}
+                                {stringToRupiah(String(this.state.total))}
                             </Text>
                         </View>
                         <View style={styles.buttonCheckOut}>
@@ -325,17 +352,18 @@ const styles = StyleSheet.create({
         paddingLeft: 2,
         paddingRight: 2,
         alignItems: 'stretch',
+        marginBottom: 50
     },
     footer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
         position: 'absolute',
+        backgroundColor: 'white',
         bottom: 0,
-        alignItems: 'stretch',
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        marginBottom: 4
+        height: 50,
+        width: '100%'
+
     },
     hrLine: {
         borderBottomColor: 'black',
@@ -428,6 +456,8 @@ const styles = StyleSheet.create({
 
     },
     buttonCheckOut: {
+
+        bottom: 0,
         flex: 1,
         borderRadius: 30,
     }

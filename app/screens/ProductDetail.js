@@ -18,6 +18,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 import axios from "axios"
+
 class ProductDetail extends Component {
 
     constructor(props) {
@@ -34,7 +35,7 @@ class ProductDetail extends Component {
         this.state = {
             id: id,
             // key:key,
-            img: '',
+            image: '',
             name: '',
             price: '',
             seller: '',
@@ -50,7 +51,7 @@ class ProductDetail extends Component {
 
             this.setState({
                 id: respon.data.id,
-                img: respon.data.img,
+                image: respon.data.image,
                 name: respon.data.name,
                 price: respon.data.price,
                 seller: respon.data.seller,
@@ -70,7 +71,7 @@ class ProductDetail extends Component {
                 <Content>
                     <Card>
                         <CardItem header>
-                            <Image source={{ uri: `${PIC_URL}${this.state.img}` }} style={styles.image} />
+                            <Image source={{ uri: `${PIC_URL}${this.state.image}` }} style={styles.image} />
                         </CardItem>
                         <CardItem header>
                             <Text style={styles.textProduct}>  {this.state.name} -{" "}</Text>
@@ -89,15 +90,21 @@ class ProductDetail extends Component {
                 <Footer style={styles.footerStyle}>
                     <Button transparent style={styles.footerButtonMain}
                         onPress={() => {
-                            this.props.navigation.navigate("CartScreen", {
-                                itemKey: this.state.key,
-                                itemImage: this.state.img,
-                                itemName: this.state.name,
-                                itemPrice: this.state.price,
-                                itemSeller: this.state.seller,
-                                itemDetails: this.state.details,
-                                quantity: 1
-                            });
+                            axios.post(BASE_URL + 'orders', {
+                                product_id: this.state.id,
+                                user_id: 1,
+                                qty: 1,
+                                price: this.state.price
+                                
+                            })
+                            .then(function(respon){
+                                alert(this.state.price)
+                                console.log(respon)
+                            })
+                            .catch(function(err){
+                                console.log(err)
+                            })
+                            this.props.navigation.navigate("CartScreen");
                         }}>
                         <Text style={styles.buttonText}>Add to Cart</Text>
                     </Button>

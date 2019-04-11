@@ -26,11 +26,11 @@ class ProductList extends Component {
     componentDidMount() {
         axios.get(`${BASE_URL}products`)
             .then( (response) =>{
-            
+              
               this.setState({
                   Product: response.data
               })
-            
+             
             console.log(response);
             })
             .catch(function (error) {
@@ -48,7 +48,9 @@ class ProductList extends Component {
     }
 
     render() {
+      
         return (
+         
             <Container>
                 <HeaderCustom onPress={this.onPressCartScreen} />
                 <Content>
@@ -56,12 +58,14 @@ class ProductList extends Component {
                         data={this.state.Product}
                         renderItem={({ item }) => (
                             <Product
+                            
                                 // _onPress={this._onPress}
-                                itemImage={`${PIC_URL}${item.img}`}
+                                itemImage={`${PIC_URL}${item.image}`}
                                 itemName={item.name}
                                 itemSeller={item.seller}
                                 itemPrice={stringToRupiah(String(item.price))}
                                 itemDetails={item.details}
+                                
                                 getDetails={() => {
                                     this.props.navigation.navigate("ProductDetail", {
                                         id: item.id

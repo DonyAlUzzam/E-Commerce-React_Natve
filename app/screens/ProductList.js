@@ -26,7 +26,7 @@ class ProductList extends Component {
     componentDidMount() {
         axios.get(`${BASE_URL}products`)
             .then( (response) =>{
-              
+            //    alert(JSON.stringify(response.data, null, 2))
               this.setState({
                   Product: response.data
               })

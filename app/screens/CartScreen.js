@@ -23,49 +23,62 @@ class CartScreen extends Component {
             product: [
 
             ],
-            total: 0
+            total: 0,
+            qty:0
+            
         };
     }
 
     // eslint-disable-next-line react/sort-comp
-    onTextChanged = (text, id) => {
-        const product = [];
-        this.state.product.forEach((val, i) => {
-            if (val.id === id) {
-                const quantity = Number(text);
-                if (!isNaN(quantity)) {
-                    product.push({
-                            id: val.key,
-                            name: val.name,
-                            price: val.price,
-                            uri: val.uri,
-                            qty: Number(text)
-                        });
-                } else {
-                    product.push(val);
-                }
-            } else {
-                product.push(val);
-            }
-        });
-        let totalPrice = 0;
-        product.forEach((val, i) => {
-            totalPrice += val.qty * val.price;
-        });
-        this.setState({
-            total: totalPrice,
-            product: product
-        });
+    onTextChanged = (text, id, qty) => {
+        axios.patch(`${BASE_URL}carts/` + id, {
+            qty: Number(text),
+            
+          })
+          .then((response) => {
+           this.getCart()
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        // const product = [];
+        // this.state.product.forEach((val, i) => {
+        //     if (val.id === id) {
+        //         const quantity = Number(text);
+        //         if (!isNaN(quantity)) {
+        //             product.push({
+        //                     id: val.key,
+        //                     name: val.name,
+        //                     price: val.price,
+        //                     uri: val.uri,
+        //                     qty: Number(text)
+        //                 });
+        //         } else {
+        //             product.push(val);
+        //         }
+        //     } else {
+        //         product.push(val);
+        //     }
+        // });
+        // let totalPrice = 0;
+        // product.forEach((val, i) => {
+        //     totalPrice += val.qty * val.price;
+        // });
+        // this.setState({
+        //     total: totalPrice,
+        //     product: product
+        // });
 
     };
 
     getCart = () => {
-        axios.get(`${BASE_URL}orders`)
+        axios.get(`${BASE_URL}carts`)
             .then((response) => {
                 // alert(JSON.stringify(response.data, null, 2))
                 this.setState({
                     product: response.data.data,
-                    total: response.data.total
+                    total: response.data.total,
+                    qty: response.data.qty
                 })
 
                 console.log(response);
@@ -84,104 +97,79 @@ class CartScreen extends Component {
             this.getCart();
 
         });
-
-
     }
 
-    addNum = (id) => {
-        const product = [];
-        const findId = this.state.product.findIndex((val, i) => {
-            if (val.id === id) {
-                product.push({
-                    id: val.id,
-                    name: val.name,
-                    uri: val.uri,
-                    price: val.price,
-                    qty: val.qty + 1,
+    addNum = (id, qty) => {
+    axios.patch(`${BASE_URL}carts/` + id, {
+        qty: qty + 1,
+        
+      })
+      .then((response) => {
+       this.getCart()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
 
-                });
-            } else {
-                product.push(val);
-            }
-            let totalPrice = 0;
-            product.findIndex((val, i) => {
-                totalPrice += val.qty * Number(val.price)
-            });
-            this.setState({
-                product: product,
-                total: totalPrice
-            });
-        });
-    };
-    subNum = (id) => {
-        const product = [];
-        const findId = this.state.product.findIndex((val, i) => {
-            if (val.id === id) {
-                if (val.qty > 1) {
-                    // console.log(this.state.poke[i]);
-                    product.push({
-                        id: val.id,
-                        name: val.name,
-                        uri: val.uri,
-                        price: val.price,
-                        qty: val.qty - 1,
-
-                    });
-                } else {
-                    product.push(val);
-                }
-            } else {
-                product.push(val);
-            }
-
-            let totalPrice = 0;
-            product.findIndex((val, i) => {
-                totalPrice += val.qty * Number(val.price)
-            });
-            this.setState({
-                product: product,
-                total: totalPrice
-            });
-        });
+    subNum = (id, qty) => {
+        axios.patch(`${BASE_URL}carts/` + id, {
+            qty: qty - 1,
+            
+          })
+          .then((response) => {
+           this.getCart()
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     };
 
     deleteItem(id) {
 
-        const findId = this.state.product.findIndex((val, i) => {
-            return val.id === id;
-        });
+        axios.delete(`${BASE_URL}carts/` + id)
+          .then((response) => {
+           this.getCart()
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
-        const product = [...this.state.product];
-        if (findId !== -1) {
-            product.splice(findId, 1);
-            this.setState({
-                product: product
-            });
-        }
-        let tempProduct = [];
-        this.state.product.forEach((val, i) => {
-            if (val.id === id) {
-                tempProduct.push({
-                    id: val.id,
-                    name: val.name,
-                    uri: val.uri,
-                    price: val.price,
-                    qty: val.qty,
+        // const findId = this.state.product.findIndex((val, i) => {
+        //     return val.id === id;
+        // });
 
-                });
-            } else {
-                tempProduct.push(val);
-            }
-        });
-        let totalPrice = 0;
-        tempProduct.forEach((val, i) => {
-            if (val.id === id) {
-                totalPrice += val.qty * Number(val.price);
-            }
-        });
-        this.setState({
-            total: this.state.total - totalPrice
-        });
+        // const product = [...this.state.product];
+        // if (findId !== -1) {
+        //     product.splice(findId, 1);
+        //     this.setState({
+        //         product: product
+        //     });
+        // }
+        // let tempProduct = [];
+        // this.state.product.forEach((val, i) => {
+        //     if (val.id === id) {
+        //         tempProduct.push({
+        //             id: val.id,
+        //             name: val.name,
+        //             uri: val.uri,
+        //             price: val.price,
+        //             qty: val.qty,
+
+        //         });
+        //     } else {
+        //         tempProduct.push(val);
+        //     }
+        // });
+        // let totalPrice = 0;
+        // tempProduct.forEach((val, i) => {
+        //     if (val.id === id) {
+        //         totalPrice += val.qty * Number(val.price);
+        //     }
+        // });
+        // this.setState({
+        //     total: this.state.total - totalPrice
+        // });
     }
 
     addData() {
@@ -249,7 +237,7 @@ class CartScreen extends Component {
                                             <View style={styles.cardList}>
                                                 <View style={styles.cardBody}>
                                                     <Cart
-                                                        itemKey={item.product.id}
+                                                        itemKey={item.product_id}
                                                         itemImage={`${PIC_URL}${item.product.image}`}
                                                         itemName={item.product.name}
                                                         itemPrice={stringToRupiah(String(item.product.price))}
@@ -268,7 +256,7 @@ class CartScreen extends Component {
                                                             }}
                                                         >
                                                             <TouchableOpacity>
-                                                                <FontAwesome name="minus" size={20} color='#f7c744' onPress={() => this.subNum(item.id)} />
+                                                                <FontAwesome name="minus" size={20} color='#b7707d' onPress={() => this.subNum(item.id, item.qty)} />
                                                             </TouchableOpacity>
                                                         </View>
                                                         <View
@@ -280,12 +268,12 @@ class CartScreen extends Component {
                                                             }}
                                                         >
                                                             <TextInput
-                                                                style={{ height: 35, width: 40, borderColor: '#f7c744', borderWidth: 1, textAlign: 'center', paddingBottom: 6 }}
-                                                                onChangeText={(text) => this.onTextChanged(text, item.id)}
+                                                                style={{ height: 35, width: 40, borderColor: '#b7707d', borderWidth: 1, textAlign: 'center', paddingBottom: 6 }}
+                                                                onChangeText={(text) => this.onTextChanged(text, item.id, item.qty)}
                                                                 textAlignVertical={'center'}
                                                                 textAlignHorizontal={'center'}
                                                                 keyboardType={'numeric'}
-                                                                value={item.qty.toString()}
+                                                                defaultValue={item.qty.toString()}
                                                             />
                                                         </View>
                                                         <View
@@ -297,7 +285,7 @@ class CartScreen extends Component {
                                                             }}
                                                         >
                                                             <TouchableOpacity>
-                                                                <FontAwesome name="plus" size={20} color='#f7c744' onPress={() => this.addNum(item.id)} />
+                                                                <FontAwesome name="plus" size={20} color='#b7707d' onPress={() => this.addNum(item.id, item.qty)} />
                                                             </TouchableOpacity>
 
                                                         </View>
@@ -439,7 +427,7 @@ const styles = StyleSheet.create({
 
     },
     buttonContainer: {
-        backgroundColor: '#f7c744',
+        backgroundColor: '#3a455c',
         paddingVertical: 10,
         borderRadius: 6,
     },

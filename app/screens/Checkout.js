@@ -25,13 +25,9 @@ export default class Checkout extends Component {
 
         return totalPayment.toString();
     }
-
-
-
     render() {
         // const { navigation } = this.props;
         // const price = navigation.getParam("itemPrice", "");
-       
         return (
             <Container>
                 <HeaderCustom />

@@ -48,7 +48,7 @@ class ProductDetail extends Component {
     componentDidMount() {
         // alert(RestAPI.base_url + 'products/' + this.state.id)
         axios.get(BASE_URL + 'products/' + this.state.id).then((respon) => {
-
+            // alert(JSON.stringify(respon))
             this.setState({
                 id: respon.data.id,
                 image: respon.data.image,
@@ -57,7 +57,7 @@ class ProductDetail extends Component {
                 seller: respon.data.seller,
                 details: respon.data.details
             })
-            // alert(JSON.stringify(respon))
+           
         }).catch((err) => {
             alert(err.getMessages())
         })
@@ -90,7 +90,7 @@ class ProductDetail extends Component {
                 <Footer style={styles.footerStyle}>
                     <Button transparent style={styles.footerButtonMain}
                         onPress={() => {
-                            axios.post(BASE_URL + 'orders', {
+                            axios.post(BASE_URL + 'carts', {
                                 product_id: this.state.id,
                                 user_id: 1,
                                 qty: 1,
@@ -106,8 +106,8 @@ class ProductDetail extends Component {
                             })
                             this.props.navigation.navigate("CartScreen");
                         }}>
-                        <Text style={styles.buttonText}>Add to Cart</Text>
-                    </Button>
+                         <Text style={styles.buttonText}>Add To Cart</Text>
+                         </Button>
                 </Footer>
             </Container>
         );
@@ -135,8 +135,10 @@ const styles = StyleSheet.create({
     footerStyle: {
         backgroundColor: "#3a455c",
         paddingBottom: 5,
+        flexDirection: 'row',
+      
         paddingTop: 5,
-        alignItems: 'stretch',
+       
     },
     textImage: {
         fontWeight: "bold",

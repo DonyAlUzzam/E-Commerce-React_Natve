@@ -4,10 +4,8 @@ import { Text, StyleSheet, Image, Alert, TouchableOpacity, TextInput } from 'rea
 import { Container, View, Card, CardItem, Content } from 'native-base';
 import { FlatList } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import config from 'react-native-config';
 import axios from 'axios'
 
-import RestAPI from '../constants/apiConstant'
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 import HeaderCart from '../components/HeaderCart'
 import Cart from '../components/Cart'
@@ -21,7 +19,6 @@ class CartScreen extends Component {
         super(props);
         this.state = {
             product: [
-
             ],
             total: 0,
             qty:0
@@ -41,34 +38,6 @@ class CartScreen extends Component {
           .catch(function (error) {
             console.log(error);
           });
-        // const product = [];
-        // this.state.product.forEach((val, i) => {
-        //     if (val.id === id) {
-        //         const quantity = Number(text);
-        //         if (!isNaN(quantity)) {
-        //             product.push({
-        //                     id: val.key,
-        //                     name: val.name,
-        //                     price: val.price,
-        //                     uri: val.uri,
-        //                     qty: Number(text)
-        //                 });
-        //         } else {
-        //             product.push(val);
-        //         }
-        //     } else {
-        //         product.push(val);
-        //     }
-        // });
-        // let totalPrice = 0;
-        // product.forEach((val, i) => {
-        //     totalPrice += val.qty * val.price;
-        // });
-        // this.setState({
-        //     total: totalPrice,
-        //     product: product
-        // });
-
     };
 
     getCart = () => {
@@ -135,41 +104,7 @@ class CartScreen extends Component {
             console.log(error);
           });
 
-        // const findId = this.state.product.findIndex((val, i) => {
-        //     return val.id === id;
-        // });
-
-        // const product = [...this.state.product];
-        // if (findId !== -1) {
-        //     product.splice(findId, 1);
-        //     this.setState({
-        //         product: product
-        //     });
-        // }
-        // let tempProduct = [];
-        // this.state.product.forEach((val, i) => {
-        //     if (val.id === id) {
-        //         tempProduct.push({
-        //             id: val.id,
-        //             name: val.name,
-        //             uri: val.uri,
-        //             price: val.price,
-        //             qty: val.qty,
-
-        //         });
-        //     } else {
-        //         tempProduct.push(val);
-        //     }
-        // });
-        // let totalPrice = 0;
-        // tempProduct.forEach((val, i) => {
-        //     if (val.id === id) {
-        //         totalPrice += val.qty * Number(val.price);
-        //     }
-        // });
-        // this.setState({
-        //     total: this.state.total - totalPrice
-        // });
+   
     }
 
     addData() {
@@ -276,6 +211,7 @@ class CartScreen extends Component {
                                                                 defaultValue={item.qty.toString()}
                                                             />
                                                         </View>
+                              
                                                         <View
                                                             style={{
                                                                 width: 18,
@@ -307,7 +243,7 @@ class CartScreen extends Component {
                     <View style={styles.footer}>
 
                         <View style={styles.buttonAdd}>
-                            <Text>Total :</Text>
+                            <Text style={{fontWeight:'bold'}}> Total :</Text>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', }}>
                                 {stringToRupiah(String(this.state.total))}
                             </Text>
@@ -350,6 +286,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         bottom: 0,
         height: 50,
+        paddingLeft: 10,
         width: '100%'
 
     },
@@ -436,7 +373,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         fontSize: 18
-    },
+    },  
     buttonAdd: {
         flex: 2,
         paddingBottom: 2,
@@ -444,7 +381,8 @@ const styles = StyleSheet.create({
 
     },
     buttonCheckOut: {
-
+        paddingRight: 10,
+        paddingLeft: 10,
         bottom: 0,
         flex: 1,
         borderRadius: 30,

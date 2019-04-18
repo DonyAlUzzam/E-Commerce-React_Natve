@@ -5,8 +5,8 @@ import FontAwesomes from "react-native-vector-icons/Entypo";
 
 import HomeScreen from '../screens/HomeScreen'
 import ProfileScreen from '../screens/ProfileScreen'
-import ProductList from '../screens/ProductList'
 import CartScreen from '../screens/CartScreen'
+import ProductContainer from '../screens/ProductContainer';
 // export const SignedOutNavigator = createStackNavigator({
 //     SignUp: {
 //       screen: SignUp,
@@ -38,7 +38,7 @@ export const RouteNav = createBottomTabNavigator({
   },
 
   ProductList: {
-    screen: ProductList,
+    screen: ProductContainer,
     navigationOptions: {
       tabBarLabel: "Product",
       tabBarIcon: ({ tintColor }) => (
@@ -59,11 +59,11 @@ export const RouteNav = createBottomTabNavigator({
     screen: ProfileScreen,
     HeaderMode: '',
     navigationOptions: {
-      title: 'Profile',
+      title: 'Account',
       headerStyle: {
         backgroundColor: '#f4511e',
       },
-      tabBarLabel: "Profile",
+      tabBarLabel: "Account",
       tabBarIcon: ({ tintColor }) => (
         <Icon name="user" size={30} color={tintColor} />
       )

@@ -14,6 +14,9 @@ import {
     Right
 } from "native-base";
 import { stringToRupiah } from "../helper/currency"
+
+import { getDetail, addToCart } from '../redux/actions';
+import {connect} from 'react-redux'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
@@ -25,21 +28,9 @@ class ProductDetail extends Component {
         super(props);
         const { navigation } = props;
         const id = navigation.getParam("id", "");
-        // const key = navigation.getParam("itemKey", "");
-        // const img = navigation.getParam("itemImage", "");
-        // const name = navigation.getParam("itemName", "");
-        // const price = navigation.getParam("itemPrice", "");
-        // const seller = navigation.getParam("itemSeller", "");
-        // const details = navigation.getParam("itemDetails", "");
-        // alert(img)
+     
         this.state = {
             id: id,
-            // key:key,
-            image: '',
-            name: '',
-            price: '',
-            seller: '',
-            details: ''
 
         }
 
@@ -47,19 +38,8 @@ class ProductDetail extends Component {
 
     componentDidMount() {
         // alert(RestAPI.base_url + 'products/' + this.state.id)
-        axios.get(BASE_URL + 'products/' + this.state.id).then((respon) => {
-            // alert(JSON.stringify(respon))
-            this.setState({
-                id: respon.data.id,
-                image: respon.data.image,
-                name: respon.data.name,
-                price: respon.data.price,
-                seller: respon.data.seller,
-                details: respon.data.details
-            })
-           
-        }).catch((err) => {
-            alert(err.getMessages())
+        this.props.navigation.addListener('didFocus', ()=>{
+            this.props.getDetail(this.state.id)
         })
     }
 
@@ -71,39 +51,26 @@ class ProductDetail extends Component {
                 <Content>
                     <Card>
                         <CardItem header>
-                            <Image source={{ uri: `${PIC_URL}${this.state.image}` }} style={styles.image} />
+                            <Image source={{ uri: `${PIC_URL}${this.props.products.image}` }} style={styles.image} />
                         </CardItem>
                         <CardItem header>
-                            <Text style={styles.textProduct}>  {this.state.name} -{" "}</Text>
-                            <Text style={styles.textImage}>   {stringToRupiah(String(this.state.price))} </Text>
+                            <Text style={styles.textProduct}>  {this.props.products.name} -{" "}</Text>
+                            <Text style={styles.textImage}>   {stringToRupiah(String(this.props.products.price))} </Text>
                         </CardItem>
                     </Card>
                     <Card>
                         <CardItem>
-                            <Text>{this.state.details}</Text>
+                            <Text>{this.props.products.details}</Text>
                         </CardItem>
                         <CardItem>
-                            <Text>{this.state.seller}</Text>
+                            <Text>{this.props.products.seller}</Text>
                         </CardItem>
                     </Card>
                 </Content>
                 <Footer style={styles.footerStyle}>
                     <Button transparent style={styles.footerButtonMain}
                         onPress={() => {
-                            axios.post(BASE_URL + 'carts', {
-                                product_id: this.state.id,
-                                user_id: 1,
-                                qty: 1,
-                                price: this.state.price
-                                
-                            })
-                            .then(function(respon){
-                                alert(this.state.price)
-                                console.log(respon)
-                            })
-                            .catch(function(err){
-                                console.log(err)
-                            })
+                           this.props.addToCart(this.state.id, this.props.products.price)
                             this.props.navigation.navigate("CartScreen");
                         }}>
                          <Text style={styles.buttonText}>Add To Cart</Text>
@@ -113,6 +80,8 @@ class ProductDetail extends Component {
         );
     }
 }
+
+
 
 const styles = StyleSheet.create({
     footerButtonMain: {
@@ -155,4 +124,15 @@ const styles = StyleSheet.create({
 
 });
 
-export default ProductDetail;
+const mapStateToProps = state => {
+    console.log('---->', state.products)
+    return { products: state.products.products }
+}
+
+const mapDispatchToProps = dispatch => ({
+    getDetail: (id) => dispatch(getDetail(id)),
+    addToCart: (id, price) => dispatch(addToCart(id, price))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail)
+

@@ -10,44 +10,21 @@ import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 import HeaderCustom from '../components/Header'
 import Product from "../components/Product"
 import { stringToRupiah } from "../helper/currency"
-import axios from 'axios'
 
 class ProductList extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            Product: []
-
-        };
-    }
-
     componentDidMount() {
-        axios.get(`${BASE_URL}products`)
-            .then( (response) =>{
-            //    alert(JSON.stringify(response.data, null, 2))
-              this.setState({
-                  Product: response.data
-              })
-             
-            console.log(response);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-            .then(function () {
-                // always executed
-            });
+       this.props.navigation.addListener('didFocus', ()=>{
+           this.props.getAll()
+       })
     }
     onPressCartScreen = () => {
         this.props.navigation.navigate('CartScreen');
         // alert('sadasdas');
-
     }
 
     render() {
+        // alert(JSON.stringify(this.props.products))
       
         return (
          
@@ -55,7 +32,7 @@ class ProductList extends Component {
                 <HeaderCustom onPress={this.onPressCartScreen} />
                 <Content>
                     <FlatList
-                        data={this.state.Product}
+                        data={this.props.products}
                         renderItem={({ item }) => (
                             <Product
                             

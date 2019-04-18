@@ -2,12 +2,15 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
+// import ShoppingCartIcon from './app/components/ShoppingCartIcon'
+import {Provider} from 'react-redux';
+import {store} from './app/redux/store'
 import RouteNav from './app/route/RouteNav'
-import ProductList from './app/screens/ProductList'
 import CartScreen from './app/screens/CartScreen'
 import ProductDetail from './app/screens/ProductDetail'
 import Checkout from './app/screens/Checkout'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
+import ProductContainer from './app/screens/ProductContainer';
 
 
 const AppDrawerNavigator =  createStackNavigator({
@@ -17,7 +20,7 @@ const AppDrawerNavigator =  createStackNavigator({
     navigationOptions: {
       header: null,
   } },
-  ProductList: { screen: ProductList,
+  ProductList: { screen: ProductContainer,
     headerMode: 'none',
     navigationOptions: {
       header: null,
@@ -27,6 +30,9 @@ const AppDrawerNavigator =  createStackNavigator({
     headerMode: '',
     navigationOptions: {
     title: 'Detail',
+    // headerRight: (
+    //   // <ShoppingCartIcon />
+    // ),
     headerStyle: {
       backgroundColor: '#3a455c',
     },
@@ -68,7 +74,10 @@ type Props = {};
 export default class App extends Component<Props> {
   render(){
     return(
-     <AppContainer />
+      <Provider store={store}>
+     <AppContainer /> 
+      </Provider>
+     
       
     );
   }

@@ -11,10 +11,7 @@ import {
     TextInput,
     Button
 } from "native-base";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { BASE_URL, PIC_URL } from 'react-native-dotenv';
-import { stringToRupiah } from "../helper/currency"
+
 
 class Cart extends Component {
     constructor(props) {

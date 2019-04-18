@@ -24,13 +24,15 @@ export default  ( state = initial, action) => {
                 total: action.payload.data.total 
             }
         case 'INC_QTY_FULFILLED':
+        
             const newIncCarts = state.carts.map((val) => {
-                if (val.id === state.payload.data.data.id){
+                if (val.id === action.payload.data.data.id){
                     return action.payload.data.data
                 } else {
                     return val
                 }
             })
+
             return {
                 carts: newIncCarts,
                 total: action.payload.data.total
@@ -50,9 +52,19 @@ export default  ( state = initial, action) => {
             }
         
         case 'DELETE_ITEM_FULFILLED':
+            
+
+            const newData = state.carts.filter(val=>{
+                return val.id !== action.payload.data.data.id
+            })
+
+            
             return {
-                carts: action.payload.data.data,
+                ...state,
+                carts: newData,
                 total: action.payload.data.total
+                // carts: action.payload.data.data,
+                // total: action.payload.data.total
             }
         
         default:

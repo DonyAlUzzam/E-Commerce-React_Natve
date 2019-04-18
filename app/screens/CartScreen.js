@@ -5,7 +5,9 @@ import { Container, View, Card, CardItem, Content } from 'native-base';
 import { FlatList } from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios'
+import {connect} from 'react-redux'
 
+import {getAllCart, incQty, decQty, inputQty,deleteItem} from '../redux/actions'
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 import HeaderCart from '../components/HeaderCart'
 import Cart from '../components/Cart'
@@ -15,147 +17,149 @@ import { stringToRupiah } from '../helper/currency';
 class CartScreen extends Component {
     // eslint-disable-next-line no-undef
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            product: [
-            ],
-            total: 0,
-            qty:0
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         product: [
+    //         ],
+    //         total: 0,
+    //         qty:0
             
-        };
-    }
-
-    // eslint-disable-next-line react/sort-comp
-    onTextChanged = (text, id, qty) => {
-        axios.patch(`${BASE_URL}carts/` + id, {
-            qty: Number(text),
-            
-          })
-          .then((response) => {
-           this.getCart()
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-    };
-
-    getCart = () => {
-        axios.get(`${BASE_URL}carts`)
-            .then((response) => {
-                // alert(JSON.stringify(response.data, null, 2))
-                this.setState({
-                    product: response.data.data,
-                    total: response.data.total,
-                    qty: response.data.qty
-                })
-
-                console.log(response);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            });
-    }
+    //     };
+    // }
 
     componentDidMount() {
-        this.getCart();
+        // this.getCart();
+        this.props.getAllCart();
         this.props.navigation.addListener('didFocus', route => {
-            this.addData();
-
-            this.getCart();
+            // this.addData();
+            this.props.getAllCart();
+            // this.getCart();
 
         });
     }
 
+    // eslint-disable-next-line react/sort-comp
+    onTextChanged = (text, id) => {
+        this.props.inputQty(id, text)
+        // axios.patch(`${BASE_URL}carts/` + id, {
+        //     qty: Number(text),
+            
+        //   })
+        //   .then((response) => {
+        //    this.getCart()
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
+    };
+
+    // getCart = () => {
+    //     axios.get(`${BASE_URL}carts`)
+    //         .then((response) => {
+    //             // alert(JSON.stringify(response.data, null, 2))
+    //             this.setState({
+    //                 product: response.data.data,
+    //                 total: response.data.total,
+    //                 qty: response.data.qty
+    //             })
+
+    //             console.log(response);
+    //         })
+    //         .catch(function (error) {
+    //             // handle error
+    //             console.log(error);
+    //         });
+    // }
+
+   
+
     addNum = (id, qty) => {
-    axios.patch(`${BASE_URL}carts/` + id, {
-        qty: qty + 1,
+      
+        this.props.incQty(id, qty + 1);
+    // axios.patch(`${BASE_URL}carts/` + id, {
+    //     qty: qty + 1,
         
-      })
-      .then((response) => {
-       this.getCart()
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    //   })
+    //   .then((response) => {
+    //    this.getCart()
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
     }
 
     subNum = (id, qty) => {
-        axios.patch(`${BASE_URL}carts/` + id, {
-            qty: qty - 1,
+        this.props.decQty(id, qty - 1);
+        // axios.patch(`${BASE_URL}carts/` + id, {
+        //     qty: qty - 1,
             
-          })
-          .then((response) => {
-           this.getCart()
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        //   })
+        //   .then((response) => {
+        //    this.getCart()
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
     };
 
     deleteItem(id) {
-
-        axios.delete(`${BASE_URL}carts/` + id)
-          .then((response) => {
-           this.getCart()
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+        this.props.deleteItem(id);
+        this.props.getAllCart();
+        // axios.delete(`${BASE_URL}carts/` + id)
+        //   .then((response) => {
+        //    this.getCart()
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   });
 
    
     }
 
-    addData() {
-        const { navigation } = this.props;
-        const uri = navigation.getParam('itemImage', '');
-        const name = navigation.getParam('itemName', '');
-        const price = navigation.getParam('itemPrice', '');
-        const id = navigation.getParam('itemKey', '');
-        const qty = navigation.getParam('quantity', '');
+    // addData() {
+    //     const { navigation } = this.props;
+    //     const uri = navigation.getParam('itemImage', '');
+    //     const name = navigation.getParam('itemName', '');
+    //     const price = navigation.getParam('itemPrice', '');
+    //     const id = navigation.getParam('itemKey', '');
+    //     const qty = navigation.getParam('quantity', '');
 
 
 
 
-        // alert(key);
-        if (id !== '') {
-            const findId = this.state.product.findIndex((val, i) => {
-                return val.id === id;
-            });
-            if (findId === -1) {
-                this.setState({
-                    total: this.state.total + Number(price),
-                    product: [
-                        ...this.state.product,
-                        {
-                            uri,
-                            name,
-                            price,
-                            id,
-                            qty
-                        }
-                    ]
-                });
-            }
-        }
-    }
+    //     // alert(key);
+    //     if (id !== '') {
+    //         const findId = this.state.product.findIndex((val, i) => {
+    //             return val.id === id;
+    //         });
+    //         if (findId === -1) {
+    //             this.setState({
+    //                 total: this.state.total + Number(price),
+    //                 product: [
+    //                     ...this.state.product,
+    //                     {
+    //                         uri,
+    //                         name,
+    //                         price,
+    //                         id,
+    //                         qty
+    //                     }
+    //                 ]
+    //             });
+    //         }
+    //     }
+    // }
 
     
     render() {
-     
-        if (this.state.product.length < 1) {
-            // eslint-disable-next-line no-unused-expressions
-            return (
 
-                <Container>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
-                        <Text>There no product on your Cart</Text>
-                    </View>
-                </Container>
-            );
-            // eslint-disable-next-line no-else-return
-        } else {
+        // this.props.total && alert(JSON.stringify(this.props.total)) 
+
+        // return (<Text>aa</Text>)
+
+        if(this.props.carts && this.props.carts.length > 0){
+
             return (
                 <Container >
                     <HeaderCart
@@ -165,7 +169,7 @@ class CartScreen extends Component {
                         <View style={styles.container}>
 
                             <FlatList
-                                data={this.state.product}
+                                data={this.props.carts}
                                 renderItem={({ item }) =>
                                     (
                                         <Card >
@@ -245,13 +249,13 @@ class CartScreen extends Component {
                         <View style={styles.buttonAdd}>
                             <Text style={{fontWeight:'bold'}}> Total :</Text>
                             <Text style={{ fontSize: 18, fontWeight: 'bold', }}>
-                                {stringToRupiah(String(this.state.total))}
+                                {stringToRupiah(String(this.props.total))}
                             </Text>
                         </View>
                         <View style={styles.buttonCheckOut}>
                             <TouchableOpacity
                                 style={styles.buttonContainer} onPress={() => this.props.navigation.navigate('Checkout', {
-                                    total: this.state.total
+                                    total: this.props.total
                                 })}
                             >
                                 <Text style={styles.buttonText}>Checkout</Text>
@@ -262,7 +266,19 @@ class CartScreen extends Component {
 
                 </Container >
             );
+
+
+        }else{
+            return (
+
+                <Container>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} >
+                        <Text>There no product on your Cart</Text>
+                    </View>
+                </Container>
+            );
         }
+    
     }
 }
 
@@ -389,4 +405,21 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CartScreen;
+
+
+const mapStateToProps = state => {
+    console.log('---->', state.products.carts)
+    return {  carts: state.products.carts,
+              total: state.products.total }
+}
+
+
+const mapDispatchToProps = dispatch => ({
+    getAllCart: () => dispatch(getAllCart()),
+    incQty: (id, qty) => dispatch(incQty(id, qty)),
+    decQty: (id, qty) => dispatch(decQty(id, qty)),
+    inputQty: (id, text) => dispatch(inputQty(id, text)),
+    deleteItem: (id) => dispatch(deleteItem(id))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartScreen)

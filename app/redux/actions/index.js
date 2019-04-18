@@ -30,14 +30,15 @@ export const addToCart = (id, price) => {
 export const getAllCart = () => {
     return{
         type: 'GET_ALL_CART',
-        payload: axios.get(`${BASE_URL}carts/1`)
+        payload: axios.get(`${BASE_URL}carts/`)
     }
 }
 
 export const incQty = (id, qty) => {
+    
     return {
         type: 'INC_QTY',
-        payload: axios.patch(`${BASE_URL}carts/` + id, {
+        payload: axios.patch(`${BASE_URL}carts/${id}`, {
             qty: qty
         })
     }
@@ -49,7 +50,7 @@ export const decQty = (id, qty) => {
 
         return {
             type: 'DEC_QTY',
-            payload: axios.patch(`${BASE_URL}carts/`+ id, {
+            payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty:quantity
             })
         }
@@ -58,7 +59,7 @@ export const decQty = (id, qty) => {
 
         return {
             type: 'DEC_QTY',
-            payload: axios.patch(`${BASE_URL}carts/`+ id, {
+            payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty: quantity
             })
         }
@@ -70,7 +71,7 @@ export const inputQty = (id, text) => {
         const qty = Number(text);
         return {
             type: 'INC_QTY',
-            payload: axios.patch(`${BASE_URL}carts/` + id, {
+            payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty: qty
             })
         }
@@ -78,7 +79,7 @@ export const inputQty = (id, text) => {
         const qty= 0
         return {
             type: 'INC_QTY',
-            payload: axios.patch(`${BASE_URL}carts/` + id,{
+            payload: axios.patch(`${BASE_URL}carts/${id}`,{
                 qty:qty
             })
         }
@@ -88,6 +89,6 @@ export const inputQty = (id, text) => {
 export const deleteItem = (id) =>{
     return {
         type: 'DELETE_ITEM',
-        payload: axios.delete(`${BASE_URL}carts/` + id)
+        payload: axios.delete(`${BASE_URL}carts/${id}`)
     }
 }

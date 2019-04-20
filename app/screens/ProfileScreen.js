@@ -1,145 +1,180 @@
-import React from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Image, ScrollView, TextInput, Button, Text, TouchableOpacity } from 'react-native';
-import { Header } from 'react-navigation';
-import SplashScreen from './SplashScreen'
-import HeaderCustom from '../components/Header';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity, StatusBar, Alert, AsyncStorage } from 'react-native';
+import { Container, Content } from 'native-base'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-class ProfileScreen extends React.Component {
+import { clearUser, getUser } from '../redux/actions'
+import {connect} from 'react-redux'
+import { getValue, removeValue } from '../redux/service/storage/AsyncStorage';
 
-  state={
-    loading: false
-  }
 
-  onPressLogin = () => {
-    this.props.navigation.navigate('ProductList');
-    // alert('sadasdas');
-}
+ class ProfileScreen extends Component {
 
- submit(){
-      this.setState({loading: true})
-     
-      setTimeout(() => {
+    componentDidMount() {
+
+        this.props.navigation.addListener('didFocus', () => {
+            if (this.props.isLoggedIn === false) {
+                this.props.navigation.navigate('SignIn')
+            }
+            else {
+                // console.log('---',this.props.token);
+                this.checkToken();
+                this.checkToken().then(val => {
+                    console.log(val);
+                    
+                });
+                
+                // console.log(token);
+            }
+        })
+
+
+    }
+
+    checkToken = async() => {
+        const token = await getValue('token')
+        if (token) {
+            this.props.getUser(token);
+            return 1;
+        }else{
+            const { type, token } = this.props.token
+            const authToken = type + ' ' + token;
+            this.props.getUser(authToken);
+
+        }
+    }
+    logout = () => {
+        this.props.clearUser()
+        removeValue('token')
         this.props.navigation.navigate('Home')
-      }, 1000);
-      
-}
+
+    }
+    confirm() {
+        Alert.alert(
+            'Logging Out?',
+            'Please press OK to continue.',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => this.logout() },
+            ],
+            { cancelable: false },
+        );
+    }
+
+
 
     render() {
-      return (
-       
-        <ScrollView style={styles.container}>
-        <Image
-            style={[ styles.logo ]}
-            source={require('../assets/logo.jpg')} />
-        <View style={styles.container}>
-        <KeyboardAvoidingView>
-            <TextInput
-                // ref={(textInput) => this._user = textInput }
-                style={styles.inputField}
-                // value=''
-                // onChangeText={(user) => this.setState({user})}
-                // onSubmitEditing={(event) => this._password.focus()}
-                // onFocus={ () => this.clearValidationErrors() }
-                editable={true}
-                maxLength={40}
-                multiline={false}
-                placeholder="Masukkan Email"
-            />
-            <TextInput
-                // ref={(textInput) => this._password = textInput }
-                style={styles.inputField}
-                // value={this.state.text}
-                // onChangeText={(password) => this.setState({password})}
-                // onSubmitEditing={(event) => this.submit()}
-                editable={true}
-                secureTextEntry={true}
-                maxLength={40}
-                multiline={false}
-                placeholder="Masukkan Password"
-            />
-            </KeyboardAvoidingView>
-            {/* { this.state.error &&
-                <View style={styles.validationErrors}>
-                    <Text style={styles.error}>{this.state.error}
-                    </Text> 
-                </View>
-            } */}
-            <View style={styles.buttonStyle}>
-            { this.state.loading ? 
-            <SplashScreen /> :
-            // <TouchableOpacity>
-            <Button
-                // onPress={() => this.submit()} 
-                title="Masuk" 
-                onPress={() => this.submit()} 
-                // onPress={this.onPressLogin}
-                />
-            // </TouchableOpacity>
-            }
-            </View>
-            <View style={styles.redirectLink}>
-                <Text>Tidak punya akun? </Text>
-                <TouchableOpacity onPress={() =>
-                this.props.navigation.navigate('signup')}>
-                <Text style={styles.link}>Daftar</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.copyright}>
-            </View>
-        </View>
-    </ScrollView>
-    
-      );
-    }
-  }
+        if (!this.props.user) return (<Text>Loading...</Text>)
 
-  export default ProfileScreen;
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white'
-    },
-    logo: {
-      width: '100%',
-      height: 250
-    },
-    inputField: {
-      marginTop: 20,
-      alignSelf: 'center',
-      height: 55,
-      width: '80%',
-      backgroundColor: '#FAFAFA',
-      borderWidth: 1,
-      paddingHorizontal: 10,
-      borderRadius: 10,
-      borderColor: "#CACACA"
-    },
-    redirectLink: {
-      marginTop: 20,
-      flex: 1,
-      flexDirection: 'row',
-      alignSelf: 'center'
-    },
-    link: {
-      color: 'blue'
-    },
-    validationErrors: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-    },
-    error: {
-      marginTop: 10,
-      textAlign: 'center',
-      color: 'red'
-    },
-    buttonStyle: {
-      marginTop: 15,
-      flex: 1
-    },
-    copyright: {
-      marginTop: 15,
-      flex: 1,
-      alignSelf: 'center'
+        const { id, username, email } = this.props.user
+        return (
+            <Container>
+                <Content>
+                    <StatusBar backgroundColor="#009C71" barStyle="light-content" />
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <TouchableOpacity style={styles.iconCart} onPress={() => this.confirm()}>
+                                <FontAwesome name="power-off" size={24} color='white' />
+                            </TouchableOpacity>
+                        </View>
+                        <Image style={styles.avatar} source={{ uri: 'http://chittagongit.com//images/avatar-icon/avatar-icon-4.jpg' }} />
+                        <View style={styles.body}>
+                            <View style={styles.bodyContent}>
+                                <Text style={styles.name}>{username}</Text>
+                                <Text style={styles.description}>{email}</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Content>
+            </Container>
+        );
     }
-  })
+}
+
+// const mapStateToProps = state => ({
+//   isLoggedIn: state.account.isLoggedIn,
+//   user: state.account.user,
+//   token: state.account.access_token
+// })
+
+
+const mapStateToProps = state => {
+  console.log('---->', state.account)
+  return { 
+    user: state.account.user,
+    token: state.account.access_token,
+    isLoggedIn: state.account.isLoggedIn }
+}
+
+const mapDispatchToProps = dispatch => ({
+  clearUser: () => dispatch(clearUser()),
+  getUser: () => dispatch(getUser(token))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen)
+
+const styles = StyleSheet.create({
+    header: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        backgroundColor: "#009C71",
+        height: 200,
+    },
+    avatar: {
+        width: 130,
+        height: 130,
+        borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white",
+        marginBottom: 10,
+        alignSelf: 'center',
+        position: 'absolute',
+        marginTop: 130
+    },
+    name: {
+        fontSize: 22,
+        color: "#FFFFFF",
+        fontWeight: '600',
+    },
+    body: {
+        marginTop: 30,
+    },
+    bodyContent: {
+        flex: 1,
+        alignItems: 'center',
+        padding: 30,
+    },
+    name: {
+        fontSize: 28,
+        color: "#696969",
+        fontWeight: "600"
+    },
+    info: {
+        fontSize: 16,
+        color: "#00BFFF",
+        marginTop: 10
+    },
+    description: {
+        fontSize: 16,
+        color: "#696969",
+        marginTop: 6,
+        textAlign: 'center'
+    },
+    buttonContainer: {
+        marginTop: 10,
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+        width: 250,
+        borderRadius: 30,
+        backgroundColor: "#009C71",
+    },
+    iconCart: { padding: 16, },
+});

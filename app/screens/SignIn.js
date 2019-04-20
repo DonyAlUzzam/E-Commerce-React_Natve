@@ -1,93 +1,150 @@
-// import React from 'react';
-// import { Text, View } from 'react-native';
-// import { Container, Content } from "native-base"
+import React from 'react';
+import { View, StyleSheet, KeyboardAvoidingView, Image, ScrollView, TextInput, Button, Text, TouchableOpacity } from 'react-native';
+import { Header } from 'react-navigation';
+import SplashScreen from './SplashScreen'
 
-// class SignIN extends React.Component {
-//     render() {
-//       return (
-//         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//           <Text>Profile!</Text>
-//         </View>
-//       );
-//     }
-//   }
+class SignIn extends React.Component {
 
-//   export default SignIn;
-
-import React, { Component } from 'react';
-import { Container, View, Left, Right, Button, Icon, Item, Input } from 'native-base';
-import { Actions } from 'react-native-router-flux';
-
-// Our custom files and classes import
-import Colors from '../Colors';
-import Text from '../component/Text';
-import Navbar from '../component/Navbar';
-
-export default class Login extends Component {
-  constructor(props) {
-      super(props);
-      this.state = {
-        username: '',
-        password: '',
-        hasError: false,
-        errorText: ''
-      };
+  state={
+    loading: false
   }
 
-
-  render() {
-    var left = (
-      <Left style={{flex:1}}>
-        <Button onPress={() => Actions.pop()} transparent>
-          <Icon name='ios-arrow-back' />
-        </Button>
-      </Left>
-    );
-    var right = (
-      <Right style={{flex:1}}>
-        <Button onPress={() => Actions.search()} transparent>
-          <Icon name='ios-search-outline' />
-        </Button>
-        <Button onPress={() => Actions.cart()} transparent>
-          <Icon name='ios-cart' />
-        </Button>
-      </Right>
-    );
-    return(
-      <Container style={{backgroundColor: '#fdfdfd'}}>
-        <Navbar left={left} right={right} title="LOGIN" />
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingLeft: 50, paddingRight: 50}}>
-          <View style={{marginBottom: 35, width: '100%'}}>
-            <Text style={{fontSize: 24, fontWeight: 'bold', textAlign: 'left', width: '100%', color: Colors.navbarBackgroundColor}}>Welcome back, </Text>
-            <Text style={{fontSize: 18, textAlign: 'left', width: '100%', color: '#687373'}}>Login to continue </Text>
-          </View>
-          <Item>
-              <Icon active name='ios-person' style={{color: "#687373"}}  />
-              <Input placeholder='Username' onChangeText={(text) => this.setState({username: text})} placeholderTextColor="#687373" />
-          </Item>
-          <Item>
-              <Icon active name='ios-lock' style={{color: "#687373"}} />
-              <Input placeholder='Password' onChangeText={(text) => this.setState({password: text})} secureTextEntry={true} placeholderTextColor="#687373" />
-          </Item>
-          {this.state.hasError?<Text style={{color: "#c0392b", textAlign: 'center', marginTop: 10}}>{this.state.errorText}</Text>:null}
-          <View style={{alignItems: 'center'}}>
-            <Button onPress={() => this.login()} style={{backgroundColor: Colors.navbarBackgroundColor, marginTop: 20}}>
-              <Text style={{color: '#fdfdfd'}}>Login</Text>
-            </Button>
-          </View>
-        </View>
-      </Container>
-    );
-  }
-
-  login() {
-    /*
-      Remove this code and replace it with your service
-      Username: this.state.username
-      Password: this.state.password
-    */
-    this.setState({hasError: true, errorText: 'Invalid username or password !'});
-  }
-
-
+  onPressLogin = () => {
+    this.props.navigation.navigate('ProductList');
+    // alert('sadasdas');
 }
+
+ submit(){
+      this.setState({loading: true})
+     
+      setTimeout(() => {
+        this.props.navigation.navigate('Home')
+      }, 1000);
+      
+}
+
+    render() {
+      return (
+       
+        <ScrollView style={styles.container}>
+        <Image
+            style={[ styles.logo ]}
+            source={require('../assets/logo.jpg')} />
+        <View style={styles.container}>
+        <KeyboardAvoidingView>
+            <TextInput
+                // ref={(textInput) => this._user = textInput }
+                style={styles.inputField}
+                // value=''
+                // onChangeText={(user) => this.setState({user})}
+                // onSubmitEditing={(event) => this._password.focus()}
+                // onFocus={ () => this.clearValidationErrors() }
+                editable={true}
+                maxLength={40}
+                multiline={false}
+                placeholder="Masukkan Email"
+            />
+            <TextInput
+                // ref={(textInput) => this._password = textInput }
+                style={styles.inputField}
+                // value={this.state.text}
+                // onChangeText={(password) => this.setState({password})}
+                // onSubmitEditing={(event) => this.submit()}
+                editable={true}
+                secureTextEntry={true}
+                maxLength={40}
+                multiline={false}
+                placeholder="Masukkan Password"
+            />
+            </KeyboardAvoidingView>
+            {/* { this.state.error &&
+                <View style={styles.validationErrors}>
+                    <Text style={styles.error}>{this.state.error}
+                    </Text> 
+                </View>
+            } */}
+            <View >
+            { this.state.loading ? 
+            <SplashScreen /> :
+            <TouchableOpacity style={styles.buttonStyle} 
+                // onPress={() => this.submit()} 
+                title="Masuk" 
+                onPress={() => this.submit()} >
+                 {/* onPress={this.onPressLogin} */}
+                <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Masuk</Text>
+             </TouchableOpacity>
+            }
+            </View>
+            <View style={styles.redirectLink}>
+                <Text>Tidak punya akun? </Text>
+                <TouchableOpacity onPress={() =>
+                this.props.navigation.navigate('SignUp')}>
+                <Text style={styles.link}>Daftar</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={styles.copyright}>
+            </View>
+        </View>
+    </ScrollView>
+    
+      );
+    }
+  }
+
+  export default SignIn;
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: 'white'
+    },
+    logo: {
+      width: '100%',
+      height: 250
+    },
+    inputField: {
+      marginTop: 20,
+      alignSelf: 'center',
+      height: 55,
+      width: '80%',
+      backgroundColor: '#FAFAFA',
+      borderWidth: 1,
+      paddingHorizontal: 10,
+      borderRadius: 10,
+      borderColor: "#CACACA"
+    },
+    redirectLink: {
+      marginTop: 20,
+      flex: 1,
+      flexDirection: 'row',
+      alignSelf: 'center'
+    },
+    link: {
+      color: 'blue'
+    },
+    validationErrors: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    error: {
+      marginTop: 10,
+      textAlign: 'center',
+      color: 'red'
+    },
+    buttonStyle: {
+      marginTop: 15,
+      paddingTop: 10,
+      paddingBottom: 10,
+      borderRadius: 10,
+      marginRight: 10,
+      marginLeft: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#957dad'
+    },
+    copyright: {
+      marginTop: 15,
+      flex: 1,
+      alignSelf: 'center'
+    }
+  })

@@ -92,3 +92,43 @@ export const deleteItem = (id) =>{
         payload: axios.delete(`${BASE_URL}carts/${id}`)
     }
 }
+
+// Account
+export const registerUser = ( username, email, password ) => {
+    return {
+        type: 'REGISTER_USER',
+        payload: axios.post(`${BASE_URL}users/register`, {
+            'username': username,
+            'email': email,
+            'password': password
+        })
+    }
+}
+
+export const loginUser = (email, password) => {
+    return {
+        type: 'LOGIN_USER',
+        payload: axios.post(`${BASE_URL}users/login`, {
+            'email': email,
+            'password': password
+        })
+    }
+}
+
+
+export const getUser = (token) => {
+    return  {
+        type: 'GET_USER',
+        payload: axios.get(`${BASE_URL}users/data`, {
+            headers: {
+                Authorization: token
+            }
+        })
+    }
+}
+
+export const clearUser= () => {
+    return {
+        type: 'CLEAR_USER'
+    }
+}

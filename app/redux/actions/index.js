@@ -15,22 +15,32 @@ export const getDetail = (id) => {
     }
 }
 
-export const addToCart = (id, price) => {
+export const addToCart = (idProduct, id, price, authToken) => {
     return {
         type: 'ADD_TO_CART',
         payload: axios.post(`${BASE_URL}carts/`, {
-            'user_id': 1,
-            'product_id': id,
+            'user_id': id,
+            'product_id': idProduct,
             'qty': 1,
             'total': price
-        })
+        },{
+            headers:{
+                Authorization: authToken
+            }
+        }
+        
+        )
     }
 }
 
-export const getAllCart = () => {
+export const getAllCart = (id, authToken) => {
     return{
         type: 'GET_ALL_CART',
-        payload: axios.get(`${BASE_URL}carts/`)
+        payload: axios.get(`${BASE_URL}carts/`+ id, {
+            headers: {
+                Authorization: authToken
+            }
+        })
     }
 }
 

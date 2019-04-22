@@ -40,7 +40,6 @@ import { getValue, removeValue } from '../redux/service/storage/AsyncStorage';
             const { type, token } = this.props.token
             const authToken = type + ' ' + token;
             this.props.getUser(authToken);
-
         }
     }
     logout = () => {
@@ -95,27 +94,30 @@ import { getValue, removeValue } from '../redux/service/storage/AsyncStorage';
     }
 }
 
-// const mapStateToProps = state => ({
-//   isLoggedIn: state.account.isLoggedIn,
-//   user: state.account.user,
-//   token: state.account.access_token
-// })
+
 
 
 const mapStateToProps = state => {
-  console.log('---->', state.account)
+  console.log('---->', state.account.access_token)
   return { 
     user: state.account.user,
     token: state.account.access_token,
     isLoggedIn: state.account.isLoggedIn }
 }
+// const mapStateToProps = state => ({
+//     isLoggedIn: state.account.isLoggedIn,
+//     user: state.account.user,
+//     token: state.account.access_token
+//   })
 
 const mapDispatchToProps = dispatch => ({
   clearUser: () => dispatch(clearUser()),
-  getUser: () => dispatch(getUser(token))
+  getUser: (token) => dispatch(getUser(token))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen)
+
+// export default ProfileScreen;
 
 const styles = StyleSheet.create({
     header: {
@@ -178,3 +180,6 @@ const styles = StyleSheet.create({
     },
     iconCart: { padding: 16, },
 });
+
+
+

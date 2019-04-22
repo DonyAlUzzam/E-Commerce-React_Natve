@@ -24,7 +24,7 @@ class ProductList extends Component {
     }
 
     render() {
-        // alert(JSON.stringify(this.props.products))
+         alert(JSON.stringify(this.props.products))
       
         return (
          

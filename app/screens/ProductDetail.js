@@ -20,7 +20,6 @@ import {connect} from 'react-redux'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
-import axios from "axios"
 
 class ProductDetail extends Component {
 

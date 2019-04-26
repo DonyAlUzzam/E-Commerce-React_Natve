@@ -8,28 +8,55 @@ import {
   TextInput,
   Button,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from "react-native";
-import { Header } from "react-navigation";
 import SplashScreen from "./SplashScreen";
+import {connect} from 'react-redux'
+import {registerUser} from '../redux/actions'
+
 
 class SignUp extends React.Component {
-  state = {
-    loading: false
-  };
-
-  onPressLogin = () => {
-    this.props.navigation.navigate("ProductList");
-    // alert('sadasdas');
-  };
-
-  submit() {
-    this.setState({ loading: true });
-
-    setTimeout(() => {
-      this.props.navigation.navigate("Home");
-    }, 1000);
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      email: "",
+      password: "",
+      confirm_password:""
+    };
   }
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+  }
+  handleBackPress = () => {
+    this.props.navigation.navigate("Home");
+    return true;
+  };
+
+  register(username, email, password, confirm_password){
+    if (confirm_password !== password){
+      alert("password not match");
+    } else {
+      this.props.registerUser(username, email, password, confirm_password)
+      this.props.navigation.navigate("Home");
+    }
+  
+  }
+
+
+  // submit() {
+  //   this.setState({ loading: true });
+
+  //   setTimeout(() => {
+  //     this.props.navigation.navigate("Home");
+  //   }, 1000);s
+  // }
 
   render() {
     return (
@@ -38,48 +65,51 @@ class SignUp extends React.Component {
         <View style={styles.container}>
           <KeyboardAvoidingView>
             <TextInput
-              // ref={(textInput) => this._user = textInput }
+               ref={(textInput) => this._user = textInput }
               style={styles.inputField}
-              // value=''
-              // onChangeText={(user) => this.setState({user})}
-              // onSubmitEditing={(event) => this._password.focus()}
+              value={this.state.username}
+              onChangeText={(text) => this.setState({ username: text })}
+              onSubmitEditing={(event) => this.email.focus()}
               // onFocus={ () => this.clearValidationErrors() }
               editable={true}
+              returnKeyType='next'
               maxLength={40}
               multiline={false}
               placeholder="Username"
             />
             <TextInput
-              // ref={(textInput) => this._user = textInput }
+              ref={(textInput) => this.email = textInput }
               style={styles.inputField}
-              // value=''
-              // onChangeText={(user) => this.setState({user})}
-              // onSubmitEditing={(event) => this._password.focus()}
+              value={this.state.email}
+              onChangeText={(text) => this.setState({email: text})}
+              onSubmitEditing={(event) => this.password.focus()}
               // onFocus={ () => this.clearValidationErrors() }
               keyboardType="email-address"
               editable={true}
+              returnKeyType='next'
               maxLength={40}
               multiline={false}
               placeholder="Masukkan Email"
             />
             <TextInput
-              // ref={(textInput) => this._password = textInput }
+              ref={(textInput) => this.password = textInput }
               style={styles.inputField}
-              // value={this.state.text}
-              // onChangeText={(password) => this.setState({password})}
-              // onSubmitEditing={(event) => this.submit()}
+              value={this.state.password}
+              onChangeText={(text) => this.setState({password: text})}
+              onSubmitEditing={(event) => this.confirm_password.focus()}
               editable={true}
               secureTextEntry={true}
+              returnKeyType='next'
               maxLength={40}
               multiline={false}
               placeholder="Masukkan Password"
             />
              <TextInput
-              // ref={(textInput) => this._password = textInput }
+              ref={(textInput) => this.confirm_password = textInput }
               style={styles.inputField}
-              // value={this.state.text}
-              // onChangeText={(password) => this.setState({password})}
-              // onSubmitEditing={(event) => this.submit()}
+              value={this.state.confirm_password}
+              onChangeText={(text) => this.setState({confirm_password: text})}
+              onSubmitEditing={(event) => this.register()}
               editable={true}
               secureTextEntry={true}
               maxLength={40}
@@ -100,7 +130,7 @@ class SignUp extends React.Component {
               <TouchableOpacity
                 style={styles.buttonStyle}
                 // onPress={() => this.submit()}
-                onPress={() => this.submit()}
+                onPress={() => this.register(this.state.username, this.state.email, this.state.password, this.state.confirm_password)}
               >
                 {/* onPress={this.onPressLogin} */}
                 <Text
@@ -126,7 +156,17 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = state => ({
+  isLoggedIn: state.account.isLoggedIn
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerUser: (username, email, password, confirm_password) => dispatch(registerUser(username, email, password, confirm_password))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+// export default SignUp;
 
 const styles = StyleSheet.create({
   container: {

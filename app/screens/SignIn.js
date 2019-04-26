@@ -18,18 +18,7 @@ import {loginUser} from '../redux/actions'
 import SplashScreen from "./SplashScreen";
 
 class SignIn extends React.Component {
-  //   state={
-  //     loading: false
-  //   }
 
-  //  submit(){
-  //       this.setState({loading: true})
-
-  //       setTimeout(() => {
-  //         this.props.navigation.navigate('Home')
-  //       }, 1000);
-
-  // }
   constructor(props) {
     super(props);
     this.state = {
@@ -66,7 +55,7 @@ class SignIn extends React.Component {
               style={styles.inputField}
               onChangeText={(text) => this.setState({ email: text })}
               value={this.state.email}
-              // onSubmitEditing={(event) => this._password.focus()}
+              onSubmitEditing={(event) => this._password.focus()}
               // onFocus={ () => this.clearValidationErrors() }
               keyboardType="email-address"
               returnKeyType='next'
@@ -74,15 +63,15 @@ class SignIn extends React.Component {
               editable={true}
               maxLength={40}
               multiline={false}
-              ref={(textInput) => this.password = textInput }
+              // ref={(textInput) => this.password = textInput }
               placeholder="Masukkan Email"
             />
             <TextInput
-              // ref={(textInput) => this._password = textInput }
+              ref={(textInput) => this._password = textInput }
               style={styles.inputField}
               value={this.state.password}
               onChangeText={(text) => this.setState({ password: text })}
-              // onSubmitEditing={(event) => this.submit()}
+        // onSubmitEditing={(event) => this.submit()}
               editable={true}
               secureTextEntry={true}
               maxLength={40}

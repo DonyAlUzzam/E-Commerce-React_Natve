@@ -13,7 +13,8 @@ import { stringToRupiah } from "../helper/currency"
 
 class ProductList extends Component {
 
-    componentDidMount() {
+   async componentDidMount() {
+
        this.props.navigation.addListener('didFocus', ()=>{
            this.props.getAll()
        })
@@ -24,7 +25,7 @@ class ProductList extends Component {
     }
 
     render() {
-         alert(JSON.stringify(this.props.products))
+        //  alert(JSON.stringify(this.props.products))
       
         return (
          
@@ -46,12 +47,6 @@ class ProductList extends Component {
                                 getDetails={() => {
                                     this.props.navigation.navigate("ProductDetail", {
                                         id: item.id
-                                        // itemKey: item.id,
-                                        // itemImage: item.img,
-                                        // itemName: item.name,
-                                        // itemPrice: item.price,
-                                        // itemSeller: item.seller,
-                                        // itemDetails: item.details
                                     });
                                 }}
                             />

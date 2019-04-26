@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 
+
 export const getAll = () => {
     return {
         type: 'GET_ALL_PRODUCTS',
@@ -16,6 +17,7 @@ export const getDetail = (id) => {
 }
 
 export const addToCart = (idProduct, id, price, authToken) => {
+    console.log(idProduct,price,id,authToken );
     return {
         type: 'ADD_TO_CART',
         payload: axios.post(`${BASE_URL}carts/`, {
@@ -33,10 +35,10 @@ export const addToCart = (idProduct, id, price, authToken) => {
     }
 }
 
-export const getAllCart = (id, authToken) => {
+export const getAllCart = (authToken) => {
     return{
         type: 'GET_ALL_CART',
-        payload: axios.get(`${BASE_URL}carts/`+ id, {
+        payload: axios.get(`${BASE_URL}carts/`, {
             headers: {
                 Authorization: authToken
             }
@@ -44,17 +46,21 @@ export const getAllCart = (id, authToken) => {
     }
 }
 
-export const incQty = (id, qty) => {
+export const incQty = (id, qty, authToken) => {
     
     return {
         type: 'INC_QTY',
         payload: axios.patch(`${BASE_URL}carts/${id}`, {
             qty: qty
+        },{
+            headers: {
+                Authorization: authToken
+            }
         })
     }
 }
 
-export const decQty = (id, qty) => {
+export const decQty = (id, qty, authToken) => {
     if(qty >0){
         const quantity = qty
 
@@ -62,6 +68,10 @@ export const decQty = (id, qty) => {
             type: 'DEC_QTY',
             payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty:quantity
+            },{
+                headers: {
+                    Authorization: authToken
+                }
             })
         }
     } else {
@@ -71,18 +81,26 @@ export const decQty = (id, qty) => {
             type: 'DEC_QTY',
             payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty: quantity
+            },{
+                headers: {
+                    Authorization: authToken
+                }
             })
         }
     }
 }
 
-export const inputQty = (id, text) => {
+export const inputQty = (id, text, authToken) => {
     if(!isNaN(Number(text))){
         const qty = Number(text);
         return {
             type: 'INC_QTY',
             payload: axios.patch(`${BASE_URL}carts/${id}`, {
                 qty: qty
+            },{
+                headers: {
+                    Authorization: authToken
+                }
             })
         }
     } else {
@@ -91,15 +109,23 @@ export const inputQty = (id, text) => {
             type: 'INC_QTY',
             payload: axios.patch(`${BASE_URL}carts/${id}`,{
                 qty:qty
+            },{
+                headers: {
+                    Authorization: authToken
+                }
             })
         }
     }
 }
 
-export const deleteItem = (id) =>{
+export const deleteItem = (id, authToken) =>{
     return {
         type: 'DELETE_ITEM',
-        payload: axios.delete(`${BASE_URL}carts/${id}`)
+        payload: axios.delete(`${BASE_URL}carts/${id}`,{
+            headers: {
+                Authorization: authToken
+            }
+        })
     }
 }
 

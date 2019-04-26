@@ -104,11 +104,6 @@ const mapStateToProps = state => {
     token: state.account.access_token,
     isLoggedIn: state.account.isLoggedIn }
 }
-// const mapStateToProps = state => ({
-//     isLoggedIn: state.account.isLoggedIn,
-//     user: state.account.user,
-//     token: state.account.access_token
-//   })
 
 const mapDispatchToProps = dispatch => ({
   clearUser: () => dispatch(clearUser()),

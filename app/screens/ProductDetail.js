@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import {
     Container,
@@ -14,9 +13,10 @@ import {
     Right
 } from "native-base";
 import { stringToRupiah } from "../helper/currency"
-
+import {getValue} from '../redux/service/storage/AsyncStorage'
 import { getDetail, addToCart } from '../redux/actions';
 import {connect} from 'react-redux'
+
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
@@ -35,43 +35,69 @@ class ProductDetail extends Component {
 
     }
 
+    // componentDidMount() {
+        
+    //     this.props.navigation.addListener('didFocus', ()=>{
+    //         this.props.getDetail(this.state.id)
+    //     })
+    // }
+
     componentDidMount() {
-        // alert(RestAPI.base_url + 'products/' + this.state.id)
-        this.props.navigation.addListener('didFocus', ()=>{
-            this.props.getDetail(this.state.id)
-        })
+        const id = this.props.navigation.getParam('id', '');
+            this.props.getDetail(id)
     }
 
+    async checkToken(idProduct, price){
+        const token = await getValue('token')
+        if(token){
+        //   console.log('>>>>>>>>', idProduct);
+            const { id } = this.props.user
+            this.props.addToCart(idProduct, price, id, token);
+            this.props.navigation.navigate('CartScreen');
+        } else {
+            const { type, token } = this.props.token
+            const authToken = type + ' ' + token;
+            const { id } =this.props.user
+            this.props.addToCart(idProduct, price, id, authToken);
+            this.props.navigation.navigate('CartScreen');
+        }
+    }
+
+    addCart(idProduct, price, name) {
+        if(this.props.isLoggedIn === false){
+            this.props.navigation.navigate('SignIn')
+        } else {
+            this.checkToken(idProduct, price)
+        }
+    }
 
     render() {
-       
         return (
             <Container>
                 <Content>
                     <Card>
                         <CardItem header>
-                            <Image source={{ uri: `${PIC_URL}${this.props.products.image}` }} style={styles.image} />
+                            <Image source={{ uri: `${PIC_URL}${this.props.readmore.image}` }} style={styles.image} />
                         </CardItem>
                         <CardItem header>
-                            <Text style={styles.textProduct}>  {this.props.products.name} -{" "}</Text>
-                            <Text style={styles.textImage}>   {stringToRupiah(String(this.props.products.price))} </Text>
+                            <Text style={styles.textProduct}>  {this.props.readmore.name} -{" "}</Text>
+                            <Text style={styles.textImage}>   {stringToRupiah(String(this.props.readmore.price))} </Text>
                         </CardItem>
                     </Card>
                     <Card>
                         <CardItem>
-                            <Text>{this.props.products.details}</Text>
+                            <Text>{this.props.readmore.details}</Text>
                         </CardItem>
                         <CardItem>
-                            <Text>{this.props.products.seller}</Text>
+                            <Text>{this.props.readmore.seller}</Text>
                         </CardItem>
                     </Card>
                 </Content>
                 <Footer style={styles.footerStyle}>
                     <Button transparent style={styles.footerButtonMain}
-                        onPress={() => {
-                           this.props.addToCart(this.state.id, this.props.products.price)
-                            this.props.navigation.navigate("CartScreen");
-                        }}>
+                      onPress={()=>{
+                          this.addCart(this.props.readmore.id, this.props.readmore.price)
+                      }}>
                          <Text style={styles.buttonText}>Add To Cart</Text>
                          </Button>
                 </Footer>
@@ -124,14 +150,18 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    console.log('---->', state.products)
-    return { products: state.products.products }
+    console.log('->', state.products.readmore)
+    return {
+        readmore: state.products.readmore,
+        access_token: state.account.access_token,
+        isLoggedIn: state.account.isLoggedIn,
+        user: state.account.user
+    }   
 }
 
 const mapDispatchToProps = dispatch => ({
     getDetail: (id) => dispatch(getDetail(id)),
-    addToCart: (id, price) => dispatch(addToCart(id, price))
+    addToCart: (idProduct, price, id, authToken) => dispatch(addToCart(idProduct, price, id, authToken))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail)
-

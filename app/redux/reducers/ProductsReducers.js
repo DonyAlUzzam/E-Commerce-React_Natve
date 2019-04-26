@@ -1,5 +1,6 @@
 const initial = {
   products: [],
+  readmore:[],
   carts: [],
   total: 0,
   isLoading: false
@@ -23,7 +24,7 @@ export default (state = initial, action) => {
     case "GET_PRODUCT_DETAIL_FULFILLED":
       return {
         ...state,
-        products: action.payload.data,
+        readmore: action.payload.data,
         isLoading: false
       };
     case "GET_PRODUCTS_DETAIL_PENDING":

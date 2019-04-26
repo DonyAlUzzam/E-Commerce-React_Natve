@@ -8,7 +8,7 @@ const initial = {
 
 export default (state = initial, action) => {
   switch (action.type) {
-    case "REFISTER_USER_FULFILLED":
+    case "REGISTER_USER_FULFILLED":
       // setValue("token", JSON.stringify(action.payload.data.access_token));
       // console.log(action.payload.data.data);
       return {

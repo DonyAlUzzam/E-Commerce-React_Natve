@@ -64,7 +64,7 @@ class HomeScreen extends React.Component {
       <Container>
         <HeaderCustom 
         _onPress={this._onPressCartScreen}/>
-
+{/* 
         <View style={{
           position: 'absolute', left: 0,
           right: 0, top: 70, height: 70, backgroundColor: '#3a455c',
@@ -82,8 +82,8 @@ class HomeScreen extends React.Component {
               <Input placeholder='Search' />
             </Item>
           </View>
-        </View>
-        <Content style={{ backgroundColor: 'silver', marginTop: 70 }}>
+        </View> */}
+        <Content style={{ backgroundColor: 'silver', marginTop: 5 }}>
           <Swiper
             autoplay={true}
             autoplayDirection={false}
